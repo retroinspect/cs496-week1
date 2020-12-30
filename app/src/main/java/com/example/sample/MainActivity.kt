@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        checkReadPermission()
+        checkPermission()
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun checkReadPermission() {
+    fun checkPermission() {
         if (!isPermitted()) {
             ActivityCompat.requestPermissions(this, permissions, 99)
         }
@@ -42,8 +42,10 @@ class MainActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun isPermitted() : Boolean {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            return false
+        for (perm in permissions) {
+            if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
         }
         return true
     }
