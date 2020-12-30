@@ -26,5 +26,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/item_layout" />
+        tools:listitem="@layout/list_item_phone" />
 </androidx.constraintlayout.widget.ConstraintLayout>
