@@ -9,7 +9,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
+import kotlinx.android.synthetic.main.fragment_home.*
 
 data class Phone (val id:String?, val name:String?, val phone:String?)
 
@@ -18,6 +21,7 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     var list = mutableListOf<Phone>()
     var sortText = "asc"
+    lateinit var adapter:PhoneAdapter
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -26,13 +30,18 @@ class HomeFragment : Fragment() {
     ): View? {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        setList()
+        var root: View = inflater.inflate(R.layout.fragment_home, container, false)
+        root = setList(root)
         return root
     }
 
-    fun setList() {
+    fun setList(root: View) : View {
         list.addAll(getPhoneNumbers())
+        adapter = PhoneAdapter(list)
+        val recycler : RecyclerView = root.findViewById(R.id.recycler)
+        recycler.adapter = adapter
+        recycler.layoutManager = LinearLayoutManager(context)
+        return root
     }
 
     fun getPhoneNumbers() : List<Phone> {
