@@ -1,5 +1,6 @@
 package com.example.sample.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
@@ -57,12 +58,9 @@ class HomeFragment : Fragment() {
 
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
         })
-        //val phones_adapter = phones.adapter as PhoneAdapter
-        //Log.i("HomeFragment", phones_adapter.data.toString())
         return root
     }
-    // 언니 23
-    // "언니 23"
+
     private fun getPhoneNumbers(sort:String, searchName:String?) : ArrayList<PhoneModel> {
         var list : ArrayList<PhoneModel> = ArrayList<PhoneModel>()
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI //전화번호 URI

@@ -5,26 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="10dp"
     android:orientation="vertical"
     tools:context=".ui.home.HomeFragment">
-
-    <!--
-    <EditText
-        android:id="@+id/phone_search"
-        android:layout_width="142dp"
-        android:layout_height="49dp"
-        android:ems="10"
-        android:hint="Search"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />-->
 
     <EditText
         android:id="@+id/phone_search"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:ems="10"
         android:hint="Search"
         android:inputType="textPersonName" />
@@ -33,17 +22,18 @@
         android:id="@+id/phone_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8"
+        android:layout_weight="6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layoutManager = "androidx.recyclerview.widget.LinearLayoutManager"/>
-    <!--
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/phone_list"
+
+    <Button
+        android:id="@+id/phone_add_button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />-->
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="전화번호 추가"
+        android:layout_marginBottom="50dp"/>
 
 </LinearLayout>
