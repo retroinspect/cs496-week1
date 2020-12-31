@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Sample</string>
-    <string name="title_home">Address Book</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">주소록</string>
+    <string name="title_dashboard">사진</string>
+    <string name="title_notifications">할 일</string>
     <string name="ImgDesc">My Image</string>
 </resources>
