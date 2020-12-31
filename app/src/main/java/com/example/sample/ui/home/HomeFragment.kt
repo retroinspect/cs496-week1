@@ -61,10 +61,12 @@ class HomeFragment : Fragment() {
         //Log.i("HomeFragment", phones_adapter.data.toString())
         return root
     }
-
+    // 언니 23
+    // "언니 23"
     private fun getPhoneNumbers(sort:String, searchName:String?) : ArrayList<PhoneModel> {
         var list : ArrayList<PhoneModel> = ArrayList<PhoneModel>()
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI //전화번호 URI
+        val id = ContactsContract.CommonDataKinds.Phone.CONTACT_ID
         val projections = arrayOf(ContactsContract.CommonDataKinds.Phone.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER)
         //조건 정의
         var wheneClause:String? = null
@@ -72,7 +74,7 @@ class HomeFragment : Fragment() {
         //검색 내용 있을 경우 검색 사용
         if(searchName?.isNotEmpty() ?: false) {
             wheneClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " like ?"
-            whereValues = arrayOf("%$searchName")
+            whereValues = arrayOf("%$searchName%")
         }
         //정렬
         val optionSort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " $sort"
