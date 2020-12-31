@@ -15,7 +15,8 @@
         android:text="홍길동"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/ic_home_black_24dp"/>
 
     <TextView
         android:id="@+id/phone_number"
@@ -32,5 +33,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_name" />
+        app:layout_constraintTop_toBottomOf="@+id/phone_name"
+        tools:text="010-1234-5678"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
