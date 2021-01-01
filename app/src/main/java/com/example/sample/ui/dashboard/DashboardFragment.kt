@@ -31,7 +31,7 @@ class DashboardFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dashboardViewModel =
                 ViewModelProvider(this).get(DashboardViewModel::class.java)
 
@@ -42,14 +42,11 @@ class DashboardFragment : Fragment() {
         images.adapter = adapter
         images.layoutManager = LinearLayoutManager(context)
 
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
-        })
-
         return root
     }
 
     private fun getAllImages(): ArrayList<ImageModel> {
-        var imageList: ArrayList<ImageModel> = ArrayList<ImageModel>()
+        val imageList: ArrayList<ImageModel> = ArrayList<ImageModel>()
         val imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val cursorOrNull = context?.contentResolver?.query(imageUri, projection, selection, selectionArgs, sortOrder)
         if (cursorOrNull != null) {
