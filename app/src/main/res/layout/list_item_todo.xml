@@ -6,41 +6,44 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:gravity="center_vertical">
 
         <CheckBox
             android:id="@+id/checkbox_todo"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/small_size"
+            android:layout_height="@dimen/small_size"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/text_todo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-             />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <EditText
             android:id="@+id/text_todo"
-            android:layout_width="wrap_content"
+            android:layout_width="288dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
+            android:autofillHints=""
             android:checked="true"
             android:gravity="start"
             android:inputType="textMultiLine"
             android:keepScreenOn="false"
-            android:minWidth="200dp"
+            android:paddingHorizontal="@dimen/small_size"
             android:text="@string/todo_text"
+            android:textSize="@dimen/small_font"
+            android:background="@android:color/transparent"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:hint="@string/empty_hint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/delete_button"
             app:layout_constraintStart_toEndOf="@+id/checkbox_todo"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <ImageButton
             android:id="@+id/delete_button"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="@dimen/small_size"
+            android:layout_height="@dimen/small_size"
             android:contentDescription="@string/delete_button_desc"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"

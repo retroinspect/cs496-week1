@@ -1,13 +1,16 @@
 package com.example.sample.ui.todo
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +18,7 @@ import com.example.sample.R
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoDatabase
 import com.example.sample.databinding.FragmentTodosBinding
-import timber.log.Timber
+
 
 class TodoFragment : Fragment() {
     private lateinit var binding: FragmentTodosBinding
@@ -25,7 +28,7 @@ class TodoFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val application = requireNotNull(this.activity).application
         val dataSource = TodoDatabase.getInstance(application).TodoDatabaseDao
 
@@ -41,30 +44,36 @@ class TodoFragment : Fragment() {
         class OnEnter : View.OnKeyListener {
             override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
                 if (v !is TextView) {
-                    Timber.i("Not a TextView")
                     return false
                 } else if ((event.action == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)
                 ) {
-                    Timber.i("Should submit")
-                    return true;
+                    val input: String = binding.createTodo.text.toString()
+                    viewModel.insert(input)
+                    binding.createTodo.text.clear()
+                    val imm =
+                        context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(
+                        binding.root.windowToken, 0
+                    )
+                    return true
                 }
-                Timber.i("Not enter")
                 return false
             }
         }
 
         binding.createTodo.setOnKeyListener(OnEnter())
+
         val todoList: RecyclerView = binding.todoList
         val adapter = TodoAdapter()
 
-        var dummy = ArrayList<Todo>()
-        dummy.add(Todo(text = "hello"))
-        dummy.add(Todo(text = "world"))
+        viewModel.todos.observe(viewLifecycleOwner, {
+            it?.let {
+                adapter.data = it as ArrayList<Todo>
+            }
+        })
 
-        adapter.data = dummy
         todoList.adapter = adapter
-//        TODO("Move to TodosViewModel")
         todoList.layoutManager = LinearLayoutManager(context)
 
         return binding.root

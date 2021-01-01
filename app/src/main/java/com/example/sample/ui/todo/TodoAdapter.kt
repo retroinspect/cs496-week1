@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.example.sample.database.Todo
-import java.util.ArrayList
 
 class TodoAdapter: RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
     class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {

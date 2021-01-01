@@ -9,4 +9,6 @@
     <string name="auto_fill_hint">코딩하기</string>
     <string name="delete_button_desc">Delete button</string>
     <string name="todo_text">coding</string>
+    <string name="clear_button">clear_button</string>
+    <string name="empty_hint">" "</string>
 </resources>

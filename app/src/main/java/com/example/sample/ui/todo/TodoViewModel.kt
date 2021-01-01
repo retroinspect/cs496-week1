@@ -12,19 +12,23 @@ class TodoViewModel(
 ) : AndroidViewModel(application) {
 
     private var focusedTodo = MutableLiveData<Todo>()
-    
+    val todos = database.getAlltodos()
+
     init {
         initializeFocusedTodo()
     }
 
+    fun onSubmit() {
+    }
+
     private fun initializeFocusedTodo() {
         viewModelScope.launch {
-            getFocusedTodoFromDatabase()
+            focusedTodo.value = getFocusedTodoFromDatabase()
         }
     }
 
-    private suspend fun getFocusedTodoFromDatabase() {
-        focusedTodo.value = database.getTodo()
+    private suspend fun getFocusedTodoFromDatabase(): Todo? {
+        return database.getTodo()
     }
 
     fun onClear() {
@@ -41,6 +45,15 @@ class TodoViewModel(
     private suspend fun insert(todo: Todo) {
         database.insert(todo)
     }
+
+    fun insert(input: String) {
+        val newTodo = Todo(text = input)
+        viewModelScope.launch {
+            insert(newTodo)
+            focusedTodo.value = getFocusedTodoFromDatabase()
+        }
+    }
+
 
     private suspend fun update(todo: Todo) {
         database.update(todo)
