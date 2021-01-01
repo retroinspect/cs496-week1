@@ -1,17 +1,16 @@
 package com.example.sample.ui.home
 
-import android.content.Intent
+import android.content.ContentProviderOperation
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import timber.log.Timber
+import kotlin.collections.ArrayList
 
 class CreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,19 +21,31 @@ class CreateActivity : AppCompatActivity() {
         var createButtonNumber = findViewById(R.id.create_phone_number) as EditText
         var createPhoneButton = findViewById(R.id.create_phone_submit) as Button
 
-        val createPhoneIntent = Intent(ContactsContract.Intents.Insert.ACTION).apply {
-            type = ContactsContract.RawContacts.CONTENT_TYPE
-        }
         createPhoneButton.setOnClickListener {
             var name: String = createButtonName.text.toString()
             var phoneNumber: String = createButtonNumber.text.toString()
-            //Timber.i("Submit " + "$name" + " "+ "$phoneNumber")
-            createPhoneIntent.apply {
-                putExtra(ContactsContract.Intents.Insert.NAME, name)
-                putExtra(ContactsContract.Intents.Insert.PHONE, phoneNumber)
-            }
-            startActivity(createPhoneIntent)
-        }
+            var ops : ArrayList<ContentProviderOperation> = ArrayList<ContentProviderOperation>()
+            var op : ContentProviderOperation.Builder = ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE,null)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME,null)
+            ops.add(op.build())
 
+            op = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,0)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,name)
+            ops.add(op.build())
+
+            op = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID,0)
+                    .withValue(ContactsContract.Data.MIMETYPE,ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber).withValue(ContactsContract.CommonDataKinds.Phone.LABEL, "LABEL?")
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
+            ops.add(op.build())
+            this.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops)
+            Toast.makeText(this, "저장되었습니다", Toast.LENGTH_LONG).show()
+            finish()
+            onResume()
+        }
     }
 }
