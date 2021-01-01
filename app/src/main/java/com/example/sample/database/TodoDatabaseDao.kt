@@ -23,22 +23,22 @@ import androidx.room.*
 @Dao
 interface TodoDatabaseDao {
     @Insert
-    fun insert(todo: Todo)
+    suspend fun insert(todo: Todo)
 
     @Update
-    fun update(todo: Todo)
+    suspend fun update(todo: Todo)
 
     @Delete
-    fun delete(todo: Todo)
+    suspend fun delete(todo: Todo)
 
     @Query("SELECT * from todo_table WHERE todoId = :key")
-    fun get(key: Long): Todo?
+    suspend fun get(key: Long): Todo?
 
     @Query("DELETE FROM todo_table")
-    fun clear()
+    suspend fun clear()
 
     @Query("SELECT * FROM todo_table ORDER BY todoId DESC LIMIT 1")
-    fun getTodo(): Todo?
+    suspend fun getTodo(): Todo?
 
     @Query("SELECT * FROM todo_table ORDER BY todoId DESC")
     fun getAlltodos(): LiveData<List<Todo>>
