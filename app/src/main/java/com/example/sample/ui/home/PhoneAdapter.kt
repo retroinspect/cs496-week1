@@ -1,9 +1,13 @@
 package com.example.sample.ui.home
 
+import android.content.ContentUris
+import android.graphics.Bitmap
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
@@ -13,10 +17,14 @@ class PhoneAdapter : RecyclerView.Adapter<PhoneAdapter.PhoneHolder>() {
     class PhoneHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val phoneName: TextView = itemView.findViewById(R.id.phone_name)
         val phoneNumber: TextView = itemView.findViewById(R.id.phone_number)
+        val phoneProfileImage: ImageView = itemView.findViewById(R.id.phone_image)
 
         fun bind(item: PhoneModel) {
             phoneName.text = item.name
             phoneNumber.text = item.phone
+            if (item.photo != null) {
+                phoneProfileImage.setImageBitmap(item.photo)
+            }
             Log.i("PhoneAdapter","bind")
         }
 

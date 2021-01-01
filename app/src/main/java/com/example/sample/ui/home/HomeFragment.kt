@@ -1,6 +1,12 @@
 package com.example.sample.ui.home
 
+import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
@@ -12,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.InputStream
 import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
@@ -73,7 +81,6 @@ class HomeFragment : Fragment() {
     private fun getPhoneNumbers(sort:String, searchName:String?) : ArrayList<PhoneModel> {
         var list : ArrayList<PhoneModel> = ArrayList<PhoneModel>()
         val phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI //전화번호 URI
-        val id = ContactsContract.CommonDataKinds.Phone.CONTACT_ID
         val projections = arrayOf(ContactsContract.CommonDataKinds.Phone.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER)
         //조건 정의
         var wheneClause:String? = null
@@ -89,17 +96,27 @@ class HomeFragment : Fragment() {
         val cursorOrNull = context?.contentResolver?.query(phoneUri,projections,wheneClause,whereValues,optionSort)
         if (cursorOrNull != null) {
             val cursor = cursorOrNull
+            val idColumn = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
             val nameColumn = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
             val numberColumn = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
 
             while (cursor.moveToNext()) {
+                val id = cursor.getString(idColumn)
                 val name = cursor.getString(nameColumn)
                 val number = cursor.getString(numberColumn)
-                val phoneModel = PhoneModel(name, number)
+                val photo = getPhoto(id)
+                val phoneModel = PhoneModel(name, number, photo)
                 list.add(phoneModel)
             }
             cursor.close()
         }
         return list
+    }
+
+    fun getPhoto(id : String) : Bitmap? {
+        var uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id.toLong())
+        var inputStream: InputStream? = ContactsContract.Contacts.openContactPhotoInputStream(context?.contentResolver, uri)
+        var bitmapFactory: Bitmap? = BitmapFactory.decodeStream(inputStream)
+        return bitmapFactory
     }
 }
