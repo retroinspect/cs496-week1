@@ -4,4 +4,9 @@
     <string name="title_dashboard">사진</string>
     <string name="title_notifications">할 일</string>
     <string name="ImgDesc">My Image</string>
+    <string name="save">저장</string>
+    <string name="phone_number">전화번호</string>
+    <string name="name">이름</string>
+    <string name="name_example">홍길동</string>
+    <string name="add_phone_number">전화번호 추가</string>
 </resources>
