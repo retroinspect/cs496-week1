@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.sample.R
 import java.util.*
 import kotlin.collections.ArrayList
@@ -40,7 +41,8 @@ class DashboardFragment : Fragment() {
         val adapter = ImageAdapter()
         adapter.data = getAllImages()
         images.adapter = adapter
-        images.layoutManager = LinearLayoutManager(context)
+        //images.layoutManager = LinearLayoutManager(context)
+        images.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
         })

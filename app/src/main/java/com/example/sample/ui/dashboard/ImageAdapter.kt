@@ -11,11 +11,9 @@ import java.util.ArrayList
 
 class ImageAdapter: RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
     class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageTitle: TextView = itemView.findViewById(R.id.image_title)
         val imageItem: ImageView = itemView.findViewById(R.id.image_item)
 
         fun bind(item: ImageModel) {
-            imageTitle.text = item.title
             imageItem.setImageURI(item.uri)
         }
 
