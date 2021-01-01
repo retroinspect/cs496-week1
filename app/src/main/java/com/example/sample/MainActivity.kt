@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
     }
 
-
     @RequiresApi(Build.VERSION_CODES.M)
     fun checkPermission() {
         if (!isPermitted()) {
