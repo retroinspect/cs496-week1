@@ -33,6 +33,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        dataBinding true
+    }
 }
 
 dependencies {
@@ -63,5 +67,7 @@ dependencies {
     // Test for Room
     kapt "androidx.room:room-compiler:$room_version"
 
+    // for dataBinding
+    kapt 'com.android.databinding:compiler:3.1.4'
 
 }
