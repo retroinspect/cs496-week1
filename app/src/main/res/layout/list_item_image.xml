@@ -16,7 +16,7 @@
         card_view:cardCornerRadius="10dp"
         card_view:contentPadding="0dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -25,9 +25,22 @@
                 android:id="@+id/image_item"
                 android:layout_width="355dp"
                 android:layout_height="210dp"
+                android:foreground="@drawable/rectangle"
                 android:scaleType="centerCrop"
-                tools:srcCompat="@drawable/ic_home_black_24dp"/>
-        </LinearLayout>
+                tools:srcCompat="@drawable/ic_home_black_24dp" />
+
+            <TextView
+                android:id="@+id/image_title"
+                android:layout_width="355dp"
+                android:layout_height="210dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="sans-serif"
+                android:text="홍길동"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:gravity="center"
+                tools:srcCompat="@drawable/ic_home_black_24dp" />
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
