@@ -1,15 +1,21 @@
 package com.example.sample.ui.dashboard
 
+import android.content.ContentProviderOperation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.provider.MediaStore
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.example.sample.R
+import timber.log.Timber
 
 class ClickImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,15 +29,35 @@ class ClickImageActivity : AppCompatActivity() {
         var shareButton = findViewById(R.id.image_share_button) as Button
 
         val imageUriString = intent.getStringExtra("image_uri")
-        if (imageUriString != null) {
-            val imageUri : Uri = imageUriString.toUri()
-            val imageTitle : String? = intent.getStringExtra("image_title")
+        val imageTitle : String? = intent.getStringExtra("image_title")
+        val imageUri : Uri? = imageUriString?.toUri()
+        if (imageUri != null) {
             imageOne.setImage(ImageSource.uri(imageUri))
         }
 
-        /*
         editButton.setOnClickListener {
+            setContentView(R.layout.image_title_edit)
+            var editTitle = findViewById(R.id.edit_image_title) as EditText
+            var editSaveButton = findViewById(R.id.edit_image_save_button) as Button
+            editTitle.setText(imageTitle)
+
+            editSaveButton.setOnClickListener {
+                var edited : String = editTitle.text.toString()
+
+                var ops : ArrayList<ContentProviderOperation> = ArrayList<ContentProviderOperation>()
+                if (imageUri != null) {
+                    var op : ContentProviderOperation.Builder = ContentProviderOperation.newUpdate(imageUri)
+                        .withValue(MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.CONTENT_TYPE)
+                        .withValue(MediaStore.Images.Media.TITLE, edited)
+                    ops.add(op.build())
+                }
+                this.getContentResolver().applyBatch(MediaStore.AUTHORITY, ops)
+                Toast.makeText(this, "수정되었습니다", Toast.LENGTH_LONG).show()
+                finish()
+                onResume()
+            }
         }
+        /*
         shareButton.setOnClickListener {
         }*/
     }

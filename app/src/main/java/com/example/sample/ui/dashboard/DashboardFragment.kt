@@ -48,10 +48,10 @@ class DashboardFragment : Fragment() {
             val itemClickIntent = Intent(context, ClickImageActivity::class.java)
 
             override fun onClick(view: View, position:Int) {
-                Log.d("DashboardFragment", "${position}번 리스트 선택")
                 itemClickIntent.putExtra("image_uri", allImages[position].uri.toString())
                 itemClickIntent.putExtra("image_title", allImages[position].title)
                 startActivity(itemClickIntent)
+                adapter.notifyDataSetChanged()
             }
         })
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
