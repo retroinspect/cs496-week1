@@ -55,9 +55,20 @@ class TodoViewModel(
         }
     }
 
+    fun update(input: String?, id: Long) {
+        Timber.i("Should change $id element into $input")
+        viewModelScope.launch {
+            val todoToUpdate = database.get(id)
+            Timber.i("$todoToUpdate")
+            if (input != null) {
+                todoToUpdate?.text = input
+            }
+            if (todoToUpdate != null) {
+                database.update(todoToUpdate)
+            }
+        }
 
-    private suspend fun update(todo: Todo) {
-        database.update(todo)
+
     }
 
     fun onClickDelete(id: Long) {

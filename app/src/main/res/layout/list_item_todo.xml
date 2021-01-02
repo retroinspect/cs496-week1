@@ -4,65 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="clickListener"
-            type="com.example.sample.ui.todo.TodoListener"/>
+            type="com.example.sample.ui.todo.TodoListener" />
 
         <variable
             name="todo"
             type="com.example.sample.database.Todo" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_vertical">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
 
         <CheckBox
             android:id="@+id/checkbox_todo"
             android:layout_width="@dimen/small_size"
             android:layout_height="@dimen/small_size"
-            android:gravity="center"
-            app:todoChecked="@{todo}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/text_todo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center" />
 
-        <EditText
-            android:id="@+id/text_todo"
+        <LinearLayout
             android:layout_width="288dp"
             android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:checked="true"
-            android:gravity="start"
-            android:inputType="textMultiLine"
-            android:keepScreenOn="false"
-            android:paddingHorizontal="@dimen/small_size"
-            android:text="@string/todo_text"
-            android:textSize="@dimen/small_font"
-            android:background="@android:color/transparent"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:hint="@string/empty_hint"
-            app:todoText="@{todo}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/delete_button"
-            app:layout_constraintStart_toEndOf="@+id/checkbox_todo"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_todo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="0dp"
+                tools:text="text" />
+
+            <EditText
+                android:id="@+id/edit_text_todo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:autofillHints=""
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:hint="@string/empty_hint"
+                android:inputType="textMultiLine"
+                android:keepScreenOn="false"
+                android:textSize="@dimen/small_font"
+                android:visibility="gone"
+                tools:text="edit_text" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/delete_button"
             android:layout_width="@dimen/small_size"
             android:layout_height="@dimen/small_size"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/delete_button_desc"
             android:gravity="center"
             android:onClick="@{() -> clickListener.onClick(todo)}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_todo"
-            app:layout_constraintTop_toTopOf="parent"
+            android:tint="@color/design_default_color_primary"
             app:srcCompat="@android:drawable/ic_delete"
             tools:srcCompat="@android:drawable/ic_delete" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
 </layout>
