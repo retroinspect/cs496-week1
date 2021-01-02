@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="clickListener"
+            type="com.example.sample.ui.todo.TodoListener"/>
+
+        <variable
+            name="todo"
+            type="com.example.sample.database.Todo" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,6 +23,7 @@
             android:layout_width="@dimen/small_size"
             android:layout_height="@dimen/small_size"
             android:gravity="center"
+            app:todoChecked="@{todo}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/text_todo"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,6 +45,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:hint="@string/empty_hint"
+            app:todoText="@{todo}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/delete_button"
             app:layout_constraintStart_toEndOf="@+id/checkbox_todo"
@@ -46,6 +57,7 @@
             android:layout_height="@dimen/small_size"
             android:contentDescription="@string/delete_button_desc"
             android:gravity="center"
+            android:onClick="@{() -> clickListener.onClick(todo)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_todo"

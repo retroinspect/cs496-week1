@@ -40,6 +40,9 @@ interface TodoDatabaseDao {
     @Query("SELECT * FROM todo_table ORDER BY todoId DESC LIMIT 1")
     suspend fun getTodo(): Todo?
 
+    @Query("SELECT * from todo_table WHERE todoId = :key")
+    fun getTodoWithId(key: Long): LiveData<Todo>
+
     @Query("SELECT * FROM todo_table ORDER BY todoId DESC")
     fun getAlltodos(): LiveData<List<Todo>>
 }

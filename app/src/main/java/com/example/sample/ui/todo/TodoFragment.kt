@@ -10,10 +10,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoDatabase
@@ -64,17 +62,20 @@ class TodoFragment : Fragment() {
 
         binding.createTodo.setOnKeyListener(OnEnter())
 
-        val todoList: RecyclerView = binding.todoList
-        val adapter = TodoAdapter()
+        val onClickDelete = TodoListener { todoId ->
+            viewModel.onClickDelete(todoId)
+        }
+
+        val adapter = TodoAdapter(onClickDelete)
 
         viewModel.todos.observe(viewLifecycleOwner, {
             it?.let {
-                adapter.data = it as ArrayList<Todo>
+                adapter.submitList(it as ArrayList<Todo>)
             }
         })
 
-        todoList.adapter = adapter
-        todoList.layoutManager = LinearLayoutManager(context)
+        binding.todoList.adapter = adapter
+        binding.todoList.layoutManager = LinearLayoutManager(context)
 
         return binding.root
     }

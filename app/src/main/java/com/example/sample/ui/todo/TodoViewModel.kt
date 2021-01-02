@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoDatabaseDao
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class TodoViewModel(
     val database: TodoDatabaseDao,
@@ -57,6 +58,16 @@ class TodoViewModel(
 
     private suspend fun update(todo: Todo) {
         database.update(todo)
+    }
+
+    fun onClickDelete(id: Long) {
+        viewModelScope.launch {
+            val todoToDelete = database.get(id)
+            Timber.i("$todoToDelete")
+            if (todoToDelete != null) {
+                database.delete(todoToDelete)
+            }
+        }
     }
 
 }
