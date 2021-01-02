@@ -16,7 +16,7 @@ class ImageAdapter: RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
         fun bind(item: ImageModel) {
             imageItem.setImageURI(item.uri)
-            imageTitleView.text = item.title
+            imageTitleView.setText(item.title)
         }
 
         companion object {
@@ -41,9 +41,23 @@ class ImageAdapter: RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = data[position]
         holder.bind(item)
+
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(it, position)
+        }
     }
 
     override fun getItemCount(): Int {
         return data.size
+    }
+
+    interface ItemClickListener {
+        fun onClick(view: View, position: Int)
+    }
+
+    private lateinit var itemClickListener: ItemClickListener
+
+    fun setItemClickListener(itemClickListener:ItemClickListener) {
+        this.itemClickListener = itemClickListener
     }
 }

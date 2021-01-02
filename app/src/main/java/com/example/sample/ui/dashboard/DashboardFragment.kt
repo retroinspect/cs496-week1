@@ -1,9 +1,11 @@
 package com.example.sample.ui.dashboard
 
 import android.content.ContentUris
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +42,18 @@ class DashboardFragment : Fragment() {
         images.setHasFixedSize(true)
         images.setLayoutManager(layoutManager)
 
-        adapter.data = getAllImages()
+        val allImages = getAllImages()
+        adapter.data = allImages
+        adapter.setItemClickListener(object: ImageAdapter.ItemClickListener{
+            val itemClickIntent = Intent(context, ClickImageActivity::class.java)
+
+            override fun onClick(view: View, position:Int) {
+                Log.d("DashboardFragment", "${position}번 리스트 선택")
+                itemClickIntent.putExtra("image_uri", allImages[position].uri.toString())
+                itemClickIntent.putExtra("image_title", allImages[position].title)
+                startActivity(itemClickIntent)
+            }
+        })
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
         })
 
