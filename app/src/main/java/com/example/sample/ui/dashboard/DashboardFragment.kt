@@ -1,6 +1,5 @@
 package com.example.sample.ui.dashboard
 
-import android.content.ContentResolver
 import android.content.ContentUris
 import android.net.Uri
 import android.os.Bundle
@@ -13,18 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.sample.R
-import java.util.*
 import kotlin.collections.ArrayList
 
 class DashboardFragment : Fragment() {
-    var imageRecyclerView: RecyclerView? = null
     var projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.Media.TITLE)
     val selection = null
     val selectionArgs = null
     val sortOrder = null
-    val collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
     private lateinit var dashboardViewModel: DashboardViewModel
 
@@ -39,11 +34,13 @@ class DashboardFragment : Fragment() {
         val root: View = inflater.inflate(R.layout.fragment_dashboard, container, false)
         val images: RecyclerView = root.findViewById(R.id.image_list)
         val adapter = ImageAdapter()
-        adapter.data = getAllImages()
-        images.adapter = adapter
-        //images.layoutManager = LinearLayoutManager(context)
-        images.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        val layoutManager = LinearLayoutManager(context)
 
+        images.adapter = adapter
+        images.setHasFixedSize(true)
+        images.setLayoutManager(layoutManager)
+
+        adapter.data = getAllImages()
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
         })
 
@@ -69,7 +66,6 @@ class DashboardFragment : Fragment() {
             }
             cursor.close()
         }
-
         return imageList
     }
 }
