@@ -4,8 +4,7 @@ import android.opengl.Visibility
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
-import android.view.View.GONE
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -52,6 +51,16 @@ class TodoAdapter(
                     return@setOnKeyListener true
                 }
                 return@setOnKeyListener false
+            }
+
+            binding.editTextTodo.setOnFocusChangeListener { v, hasFocus ->
+                if (hasFocus) {
+                    Timber.i("${item.todoId} has focus")
+                    binding.deleteButton.visibility = VISIBLE
+                }
+                else {
+                    binding.deleteButton.visibility = INVISIBLE
+                }
             }
 
             binding.clickListener = todoActions.onClickDelete
