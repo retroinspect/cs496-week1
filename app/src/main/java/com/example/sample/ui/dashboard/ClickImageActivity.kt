@@ -4,18 +4,17 @@ import android.content.ContentProviderOperation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.example.sample.R
-import timber.log.Timber
 
 class ClickImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +22,7 @@ class ClickImageActivity : AppCompatActivity() {
 
         setContentView(R.layout.click_image)
         val intent : Intent = getIntent()
+        lateinit var newTitle: String;
 
         var imageOne = findViewById(R.id.image_item_one) as SubsamplingScaleImageView
         var editButton = findViewById(R.id.image_title_edit_button) as Button
@@ -43,6 +43,8 @@ class ClickImageActivity : AppCompatActivity() {
 
             editSaveButton.setOnClickListener {
                 var edited : String = editTitle.text.toString()
+                intent.putExtra("edited_text", edited)
+                newTitle = edited
 
                 var ops : ArrayList<ContentProviderOperation> = ArrayList<ContentProviderOperation>()
                 if (imageUri != null) {
@@ -53,8 +55,8 @@ class ClickImageActivity : AppCompatActivity() {
                 }
                 this.getContentResolver().applyBatch(MediaStore.AUTHORITY, ops)
                 Toast.makeText(this, "수정되었습니다", Toast.LENGTH_LONG).show()
+                Log.i("ClickActivity","edit finish")
                 finish()
-                onResume()
             }
         }
         /*
