@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="small_size">36dp</dimen>
     <dimen name="small_font">16sp</dimen>
+    <dimen name="todo_title">20sp</dimen>
 </resources>

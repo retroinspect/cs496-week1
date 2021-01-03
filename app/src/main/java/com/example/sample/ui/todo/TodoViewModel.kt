@@ -73,6 +73,12 @@ class TodoViewModel(
         }
     }
 
+    fun updateTitle(input: String?) {
+//        viewModelScope.launch {
+//            database.updateTitle(input)
+//        }
+    }
+
     fun onClickDelete(id: Long) {
         viewModelScope.launch {
             val todoToDelete = database.get(id)

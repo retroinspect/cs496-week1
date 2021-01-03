@@ -88,4 +88,6 @@ class TodoActions(
         viewModel.setFocus()
     }
 
+    val updateTitle = { input: String -> viewModel.updateTitle(input)}
+
 }

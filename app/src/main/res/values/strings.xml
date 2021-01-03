@@ -13,4 +13,5 @@
     <string name="empty_hint">" "</string>
     <string name="create_todo_button">create_todo_button</string>
     <string name="create_todo_text">새로운 할 일</string>
+    <string name="todo_title_hint">오늘 할 일</string>
 </resources>

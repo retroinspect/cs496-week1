@@ -1,6 +1,5 @@
 package com.example.sample.ui.todo
 
-import android.opengl.Visibility
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
