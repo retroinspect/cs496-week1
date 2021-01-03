@@ -98,7 +98,7 @@ class ClickImageActivity : AppCompatActivity() {
                 })
                 kakaoAlertBuilder.setNegativeButton("아니오", object: DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
-                        Toast.makeText(getApplicationContext(),"Pressed Cancle", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(getApplicationContext(),"Pressed Cancel", Toast.LENGTH_SHORT).show()
                     }
                 })
                 kakaoAlertBuilder.create().show()
