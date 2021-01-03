@@ -12,4 +12,5 @@
     <string name="clear_button">clear_button</string>
     <string name="empty_hint">" "</string>
     <string name="create_todo_button">create_todo_button</string>
+    <string name="create_todo_text">새로운 할 일</string>
 </resources>

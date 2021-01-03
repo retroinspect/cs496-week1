@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="start|top"
         android:padding="@dimen/small_size">
 
 
@@ -50,17 +51,16 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/todo_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="320dp"
             android:layout_marginTop="8dp" />
 
         <LinearLayout
             android:id="@+id/create_todo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginTop="16dp"
             android:gravity="center_vertical"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="100dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -68,13 +68,15 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/create_todo_button"
+                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 app:srcCompat="@android:drawable/ic_menu_add"
                 tools:srcCompat="@android:drawable/ic_menu_add" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="새로운 할 일" />
+                android:text="@string/create_todo_text" />
         </LinearLayout>
 
     </LinearLayout>

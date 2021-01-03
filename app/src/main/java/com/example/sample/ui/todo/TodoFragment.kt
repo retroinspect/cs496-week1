@@ -80,5 +80,12 @@ class TodoActions(
     }
 
     val updateTodo = { todoId: Long, input: String -> viewModel.update(input, todoId) }
+    val insertTodo = { viewModel.insert() }
     val hideKeyboard = { Util.hideKeyboard(context, binding.root) }
+
+    val getFocus = { todo: Todo -> viewModel.hasFocus(todo) }
+    val setFocus = {
+        viewModel.setFocus()
+    }
+
 }

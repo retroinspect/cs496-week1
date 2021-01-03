@@ -19,7 +19,14 @@ class TodoViewModel(
         initializeFocusedTodo()
     }
 
-    fun onSubmit() {
+    fun setFocus() {
+        viewModelScope.launch {
+            focusedTodo.value = getFocusedTodoFromDatabase()
+        }
+    }
+
+    fun hasFocus(todo: Todo): Boolean {
+        return todo.todoId == focusedTodo.value?.todoId ?: false
     }
 
     private fun initializeFocusedTodo() {
@@ -51,7 +58,6 @@ class TodoViewModel(
         val newTodo = Todo(text = input)
         viewModelScope.launch {
             insert(newTodo)
-            focusedTodo.value = getFocusedTodoFromDatabase()
         }
     }
 

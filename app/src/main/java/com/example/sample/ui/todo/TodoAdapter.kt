@@ -46,11 +46,17 @@ class TodoAdapter(
                 val input = binding.editTextTodo.text.toString()
                 if (Util.isEnterPressedDown(keyCode, event)) {
                     todoActions.updateTodo(item.todoId, input)
-                    todoActions.hideKeyboard()
+                    todoActions.insertTodo()
+                    todoActions.setFocus()
                     binding.textTodo.text = input
+                    binding.editTextTodo.clearFocus()
                     return@setOnKeyListener true
                 }
                 return@setOnKeyListener false
+            }
+
+            if (todoActions.getFocus(item)) {
+                binding.editTextTodo.requestFocus()
             }
 
             binding.editTextTodo.setOnFocusChangeListener { v, hasFocus ->
