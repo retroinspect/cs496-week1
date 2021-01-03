@@ -5,6 +5,7 @@
         android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:name=".SampleApplication"
         android:allowBackup="true"
@@ -22,7 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".ui.home.CreateActivity"/>
+=======
+        <activity android:name=".ui.dashboard.ClickImageActivity"/>
+>>>>>>> feature/pinterest
     </application>
 
 </manifest>

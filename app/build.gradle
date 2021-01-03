@@ -52,5 +52,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
 }
