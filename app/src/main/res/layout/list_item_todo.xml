@@ -25,7 +25,11 @@
             android:id="@+id/checkbox_todo"
             android:layout_width="@dimen/small_size"
             android:layout_height="@dimen/small_size"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textColorHighlight="@color/purple_700"
+            android:textColorLink="@color/purple_500"
+            app:buttonTint="@color/purple_200"
+            tools:checked="true" />
 
         <LinearLayout
             android:layout_width="264dp"
