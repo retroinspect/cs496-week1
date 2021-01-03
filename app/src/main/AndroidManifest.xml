@@ -23,11 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
         <activity android:name=".ui.home.CreateActivity"/>
-=======
         <activity android:name=".ui.dashboard.ClickImageActivity"/>
->>>>>>> feature/pinterest
     </application>
 
 </manifest>
