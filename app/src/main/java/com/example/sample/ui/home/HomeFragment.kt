@@ -103,8 +103,9 @@ class HomeFragment : Fragment() {
             while (cursor.moveToNext()) {
                 val id = cursor.getString(idColumn)
                 val name = cursor.getString(nameColumn)
-                val number = cursor.getString(numberColumn)
+                var number = cursor.getString(numberColumn)
                 val photo = getPhoto(id)
+                number = featPhoneNumber(number)
                 val phoneModel = PhoneModel(name, number, photo)
                 list.add(phoneModel)
             }
@@ -118,5 +119,16 @@ class HomeFragment : Fragment() {
         var inputStream: InputStream? = ContactsContract.Contacts.openContactPhotoInputStream(context?.contentResolver, uri)
         var bitmapFactory: Bitmap? = BitmapFactory.decodeStream(inputStream)
         return bitmapFactory
+    }
+
+    fun featPhoneNumber(number : String) : String {
+        var phone : String = number
+        if (number.length == 11) {
+            phone = number.substring(0,3) + "-" + number.substring(3,7) + "-" + number.substring(7,11)
+        }
+        else if (number.length == 10) {
+            phone = number.substring(0,3) + "-" + number.substring(3,6) + "-" + number.substring(6,10)
+        }
+        return phone
     }
 }

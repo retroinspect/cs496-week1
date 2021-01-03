@@ -36,7 +36,7 @@
         android:id="@+id/phone_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
+        android:layout_marginStart="150dp"
         android:layout_marginLeft="72dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="170dp"

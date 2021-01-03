@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.telephony.SmsManager
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -59,8 +60,13 @@ class ClickImageActivity : AppCompatActivity() {
                 finish()
             }
         }
-        /*
+
         shareButton.setOnClickListener {
-        }*/
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type  = "image/*"
+            intent.putExtra(Intent.EXTRA_STREAM, imageUri)
+            intent.setPackage("com.kakao.talk")
+            this.startActivity(intent)
+        }
     }
 }
