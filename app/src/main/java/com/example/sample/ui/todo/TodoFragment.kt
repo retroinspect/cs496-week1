@@ -1,10 +1,14 @@
 package com.example.sample.ui.todo
 
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,6 +19,8 @@ import com.example.sample.Util
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoDatabase
 import com.example.sample.databinding.FragmentTodosBinding
+import timber.log.Timber
+import java.util.function.ToDoubleBiFunction
 
 
 class TodoFragment : Fragment() {
@@ -38,53 +44,9 @@ class TodoFragment : Fragment() {
         binding.todoViewModel = viewModel
         binding.lifecycleOwner = this
 
-        class OnEnter : View.OnKeyListener {
-            override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
-                if (v !is TextView)
-                    return false
+        binding.createTodo.setOnClickListener { viewModel.insert() }
 
-                if (Util.isEnterPressedDown(keyCode, event)) {
-                    val input: String = binding.createTodo.text.toString()
-                    Util.hideKeyboard(context, binding.root)
-                    viewModel.insert(input)
-                    binding.createTodo.text.clear()
-                    return true
-                }
-
-                return false
-            }
-        }
-
-        class TodoPressOnEnter(val todoId: Long, val input: String) :
-            View.OnKeyListener {
-            override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
-                if (v !is TextView)
-                    return false
-
-                if (Util.isEnterPressedDown(keyCode, event)) {
-                    Util.hideKeyboard(context, binding.root)
-                    viewModel.update(input, todoId)
-                    return true
-                }
-                return false
-            }
-        }
-
-
-        binding.createTodo.setOnKeyListener(OnEnter())
-
-
-//        val todoActions = object {
-//            val onClickDelete = TodoListener { todoId ->
-//                viewModel.onClickDelete(todoId)
-//            }
-//
-//            val toggleCheckTodo = TodoListener { todoId ->
-//                viewModel.toggleCheck(todoId)
-//            }
-//        }
-
-        val adapter = TodoAdapter(TodoActions(viewModel))
+        val adapter = TodoAdapter(TodoActions(viewModel, binding, context))
 
         viewModel.todos.observe(viewLifecycleOwner,
             {
@@ -94,13 +56,21 @@ class TodoFragment : Fragment() {
             })
 
         binding.todoList.adapter = adapter
-        binding.todoList.layoutManager = LinearLayoutManager(context)
+
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.reverseLayout = true
+        layoutManager.stackFromEnd = true
+        binding.todoList.layoutManager = layoutManager
 
         return binding.root
     }
 }
 
-class TodoActions(val viewModel: TodoViewModel) {
+class TodoActions(
+    val viewModel: TodoViewModel,
+    val binding: FragmentTodosBinding,
+    val context: Context?
+) {
     val onClickDelete = TodoListener { todoId ->
         viewModel.onClickDelete(todoId)
     }
@@ -108,4 +78,7 @@ class TodoActions(val viewModel: TodoViewModel) {
     val toggleCheckTodo = TodoListener { todoId ->
         viewModel.toggleCheck(todoId)
     }
+
+    val updateTodo = { todoId: Long, input: String -> viewModel.update(input, todoId) }
+    val hideKeyboard = { Util.hideKeyboard(context, binding.root) }
 }

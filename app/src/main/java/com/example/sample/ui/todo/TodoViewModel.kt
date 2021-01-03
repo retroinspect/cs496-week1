@@ -47,7 +47,7 @@ class TodoViewModel(
         database.insert(todo)
     }
 
-    fun insert(input: String) {
+    fun insert(input: String = "") {
         val newTodo = Todo(text = input)
         viewModelScope.launch {
             insert(newTodo)
@@ -56,10 +56,8 @@ class TodoViewModel(
     }
 
     fun update(input: String?, id: Long) {
-        Timber.i("Should change $id element into $input")
         viewModelScope.launch {
             val todoToUpdate = database.get(id)
-            Timber.i("$todoToUpdate")
             if (input != null) {
                 todoToUpdate?.text = input
             }
@@ -67,8 +65,6 @@ class TodoViewModel(
                 database.update(todoToUpdate)
             }
         }
-
-
     }
 
     fun onClickDelete(id: Long) {

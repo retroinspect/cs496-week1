@@ -10,70 +10,72 @@
             type="com.example.sample.ui.todo.TodoViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        tools:context=".ui.todo.TodoFragment">
+        android:orientation="vertical"
+        android:padding="@dimen/small_size">
 
 
-        <TextView
-            android:id="@+id/title_todo"
-            android:layout_width="288dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="start"
-            android:text="@string/title_todo"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/todo_list"
-            app:layout_constraintEnd_toStartOf="@id/clear_todo_all"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-             />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/title_todo"
+                android:layout_width="288dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/title_todo"
+                android:textSize="20sp" />
 
 
-        <ImageButton
-            android:contentDescription="@string/clear_button"
-            android:id="@+id/clear_todo_all"
-            android:layout_width="@dimen/small_size"
-            android:layout_height="@dimen/small_size"
-            android:layout_marginTop="4dp"
-            android:onClick="@{() -> todoViewModel.onClear()}"
-            android:src="@android:drawable/ic_menu_delete"
-            app:layout_constraintStart_toEndOf="@id/title_todo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_delete"
-            tools:srcCompat="@android:drawable/ic_menu_delete" />
+            <ImageButton
+                android:id="@+id/clear_todo_all"
+                android:layout_width="@dimen/small_size"
+                android:layout_height="@dimen/small_size"
+                android:layout_marginTop="4dp"
+                android:contentDescription="@string/clear_button"
+                android:onClick="@{() -> todoViewModel.onClear()}"
+                android:src="@android:drawable/ic_menu_delete" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/todo_list"
-            android:name="todo_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/create_todo"
-            app:layout_constraintTop_toBottomOf="@+id/title_todo"
-            tools:layout_editor_absoluteX="43dp" />
+            android:layout_marginTop="8dp" />
 
-        <EditText
+        <LinearLayout
             android:id="@+id/create_todo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
             android:layout_marginBottom="32dp"
-            android:autofillHints="@string/auto_fill_hint"
-            android:gravity="start"
-            android:hint="@string/create_todo_hint"
-            android:inputType="textMultiLine"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/todo_list" />
+            android:orientation="horizontal">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/create_todo_button"
+                app:srcCompat="@android:drawable/ic_menu_add"
+                tools:srcCompat="@android:drawable/ic_menu_add" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="새로운 할 일" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </layout>

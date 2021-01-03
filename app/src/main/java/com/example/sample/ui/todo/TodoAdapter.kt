@@ -1,11 +1,16 @@
 package com.example.sample.ui.todo
 
+import android.opengl.Visibility
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sample.Util
 import com.example.sample.database.Todo
 import com.example.sample.databinding.ListItemTodoBinding
 import timber.log.Timber
@@ -32,16 +37,31 @@ class TodoAdapter(
         ) {
             binding.todo = item
             binding.textTodo.text = item.text
+            binding.editTextTodo.setText(item.text)
+
+            binding.textTodo.setOnClickListener {
+                binding.editTextTodo.visibility = VISIBLE
+            }
+
+            binding.editTextTodo.setOnKeyListener { v: View, keyCode: Int, event: KeyEvent ->
+                val input = binding.editTextTodo.text.toString()
+                if (Util.isEnterPressedDown(keyCode, event)) {
+                    todoActions.updateTodo(item.todoId, input)
+                    todoActions.hideKeyboard()
+                    binding.textTodo.text = input
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener false
+            }
+
             binding.clickListener = todoActions.onClickDelete
             binding.checkboxTodo.isChecked = item.isCompleted
             binding.checkboxTodo.setOnClickListener {
-                todoActions.toggleCheckTodo.clickListener(
-                    item.todoId
+                todoActions.toggleCheckTodo.onClick(
+                    item
                 )
             }
-//            binding.textTodo.setOnKeyListener(
-//                makePressOnEnterListener(item.todoId, binding.textTodo.text.toString())
-//            )
+
             binding.executePendingBindings()
         }
     }

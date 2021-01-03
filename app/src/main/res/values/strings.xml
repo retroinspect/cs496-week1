@@ -11,4 +11,5 @@
     <string name="todo_text">coding</string>
     <string name="clear_button">clear_button</string>
     <string name="empty_hint">" "</string>
+    <string name="create_todo_button">create_todo_button</string>
 </resources>
