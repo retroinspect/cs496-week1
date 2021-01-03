@@ -32,7 +32,6 @@ class DashboardFragment : Fragment() {
     val selection = null
     val selectionArgs = null
     val sortOrder = null
-    var refresh : Boolean = false
 
     private lateinit var dashboardViewModel: DashboardViewModel
 
