@@ -11,8 +11,7 @@ import com.example.sample.databinding.ListItemTodoBinding
 import timber.log.Timber
 
 class TodoAdapter(
-    private val onClickDelete: TodoListener,
-    val makePressOnEnterListener: (id: Long, input: String) -> View.OnKeyListener
+    val todoActions: TodoActions
 ) : ListAdapter<Todo, TodoAdapter.ViewHolder>(TodoDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,19 +22,23 @@ class TodoAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         Timber.i("ViewHolder of ${item.todoId} created")
-        holder.bind(item, onClickDelete, makePressOnEnterListener)
+        holder.bind(item, todoActions)
     }
 
     class ViewHolder(val binding: ListItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(
             item: Todo,
-            clickListener: TodoListener,
-            makePressOnEnterListener: (id: Long, input: String) -> View.OnKeyListener
+            todoActions: TodoActions
         ) {
             binding.todo = item
-            binding.textTodo.setText(item.text)
-            binding.clickListener = clickListener
+            binding.textTodo.text = item.text
+            binding.clickListener = todoActions.onClickDelete
             binding.checkboxTodo.isChecked = item.isCompleted
+            binding.checkboxTodo.setOnClickListener {
+                todoActions.toggleCheckTodo.clickListener(
+                    item.todoId
+                )
+            }
 //            binding.textTodo.setOnKeyListener(
 //                makePressOnEnterListener(item.todoId, binding.textTodo.text.toString())
 //            )

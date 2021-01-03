@@ -73,16 +73,18 @@ class TodoFragment : Fragment() {
 
         binding.createTodo.setOnKeyListener(OnEnter())
 
-        val onClickDelete = TodoListener { todoId ->
-            viewModel.onClickDelete(todoId)
-        }
 
-        val adapter = TodoAdapter(onClickDelete) { id: Long, input: String ->
-            TodoPressOnEnter(
-                id,
-                input
-            )
-        }
+//        val todoActions = object {
+//            val onClickDelete = TodoListener { todoId ->
+//                viewModel.onClickDelete(todoId)
+//            }
+//
+//            val toggleCheckTodo = TodoListener { todoId ->
+//                viewModel.toggleCheck(todoId)
+//            }
+//        }
+
+        val adapter = TodoAdapter(TodoActions(viewModel))
 
         viewModel.todos.observe(viewLifecycleOwner,
             {
@@ -95,5 +97,15 @@ class TodoFragment : Fragment() {
         binding.todoList.layoutManager = LinearLayoutManager(context)
 
         return binding.root
+    }
+}
+
+class TodoActions(val viewModel: TodoViewModel) {
+    val onClickDelete = TodoListener { todoId ->
+        viewModel.onClickDelete(todoId)
+    }
+
+    val toggleCheckTodo = TodoListener { todoId ->
+        viewModel.toggleCheck(todoId)
     }
 }

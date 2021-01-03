@@ -81,4 +81,14 @@ class TodoViewModel(
         }
     }
 
+    fun toggleCheck(id: Long) {
+        viewModelScope.launch {
+            val todoToUpdate = database.get(id)
+            if (todoToUpdate != null) {
+                todoToUpdate.isCompleted = !todoToUpdate.isCompleted
+                database.update(todoToUpdate)
+            }
+        }
+    }
+
 }
