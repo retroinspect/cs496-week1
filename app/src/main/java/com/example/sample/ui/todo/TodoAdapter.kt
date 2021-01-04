@@ -3,19 +3,26 @@ package com.example.sample.ui.todo
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.Util
 import com.example.sample.database.Todo
 import com.example.sample.databinding.ListItemTodoBinding
+import io.realm.OrderedRealmCollection
+import io.realm.RealmRecyclerViewAdapter
 import timber.log.Timber
 
+
 class TodoAdapter(
-    val todoActions: TodoActions
-) : ListAdapter<Todo, TodoAdapter.ViewHolder>(TodoDiffCallback()) {
+    val todoActions: TodoActions,
+    realmResult: OrderedRealmCollection<Todo>,
+) : RealmRecyclerViewAdapter<Todo, TodoAdapter.ViewHolder>(realmResult, true) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListItemTodoBinding.inflate(layoutInflater, parent, false)
@@ -24,8 +31,10 @@ class TodoAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        Timber.i("ViewHolder of ${item.todoId} created")
-        holder.bind(item, todoActions)
+        Timber.i("ViewHolder of ${item?.todoId} created")
+        if (item != null) {
+            holder.bind(item, todoActions)
+        }
     }
 
     class ViewHolder(val binding: ListItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -39,6 +48,7 @@ class TodoAdapter(
 
             binding.textTodo.setOnClickListener {
                 binding.editTextTodo.visibility = VISIBLE
+                todoActions.getFocus(item)
             }
 
             binding.editTextTodo.setOnKeyListener { v: View, keyCode: Int, event: KeyEvent ->
@@ -46,7 +56,7 @@ class TodoAdapter(
                 if (Util.isEnterPressedDown(keyCode, event)) {
                     todoActions.updateTodo(item.todoId, input)
                     todoActions.insertTodo()
-                    todoActions.setFocus()
+                    todoActions.setFocus(item.createdAt)
                     binding.textTodo.text = input
                     binding.editTextTodo.clearFocus()
                     return@setOnKeyListener true
@@ -54,7 +64,7 @@ class TodoAdapter(
                 return@setOnKeyListener false
             }
 
-            if (todoActions.getFocus(item)) {
+            if (todoActions.hasFocus(item)) {
                 binding.editTextTodo.requestFocus()
             }
 
@@ -62,8 +72,7 @@ class TodoAdapter(
                 if (hasFocus) {
                     Timber.i("${item.todoId} has focus")
                     binding.deleteButton.visibility = VISIBLE
-                }
-                else {
+                } else {
                     binding.deleteButton.visibility = INVISIBLE
                 }
             }
@@ -79,19 +88,11 @@ class TodoAdapter(
             binding.executePendingBindings()
         }
     }
-}
-
-class TodoDiffCallback : DiffUtil.ItemCallback<Todo>() {
-    override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-        return oldItem.todoId == newItem.todoId
-    }
-
-    override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
-        return oldItem == newItem
-    }
 
 }
 
-class TodoListener(val clickListener: (todoId: Long) -> Unit) {
+class TodoListener(val clickListener: (todoId: String) -> Unit) {
     fun onClick(todo: Todo) = clickListener(todo.todoId)
 }
+
+

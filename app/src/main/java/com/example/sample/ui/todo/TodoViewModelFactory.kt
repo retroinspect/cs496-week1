@@ -19,7 +19,7 @@ package com.example.sample.ui.todo
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.sample.database.TodoDatabaseDao
+import com.example.sample.database.TodoRealmManager
 
 /**
  * This is pretty much boiler plate code for a ViewModel Factory.
@@ -27,7 +27,7 @@ import com.example.sample.database.TodoDatabaseDao
  * Provides the SleepDatabaseDao and context to the ViewModel.
  */
 class TodoViewModelFactory(
-    private val dataSource: TodoDatabaseDao,
+    private val dataSource: TodoRealmManager,
     private val application: Application) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

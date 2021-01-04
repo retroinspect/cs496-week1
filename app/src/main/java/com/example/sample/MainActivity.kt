@@ -13,6 +13,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.sample.database.Note
+import com.example.sample.database.NoteRealmManager
+import io.realm.Realm
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -52,4 +55,5 @@ class MainActivity : AppCompatActivity() {
         }
         return true
     }
+
 }

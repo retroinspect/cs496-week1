@@ -1,102 +1,64 @@
 package com.example.sample.ui.todo
 
 import android.app.Application
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.example.sample.database.Todo
-import com.example.sample.database.TodoDatabaseDao
-import kotlinx.coroutines.launch
-import timber.log.Timber
+import com.example.sample.database.TodoRealmManager
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TodoViewModel(
-    val database: TodoDatabaseDao,
+    val database: TodoRealmManager,
     application: Application
 ) : AndroidViewModel(application) {
 
     private var focusedTodo = MutableLiveData<Todo>()
-    val todos = database.getAlltodos()
 
     init {
-        initializeFocusedTodo()
+        focusedTodo.value = database.getFocusedTodo()
     }
 
-    fun setFocus() {
-        viewModelScope.launch {
-            focusedTodo.value = getFocusedTodoFromDatabase()
-        }
+    fun setFocus(createdAt: Date) {
+        focusedTodo.value = database.getFocusedTodo(createdAt)
     }
 
     fun hasFocus(todo: Todo): Boolean {
         return todo.todoId == focusedTodo.value?.todoId ?: false
     }
 
-    private fun initializeFocusedTodo() {
-        viewModelScope.launch {
-            focusedTodo.value = getFocusedTodoFromDatabase()
-        }
-    }
-
-    private suspend fun getFocusedTodoFromDatabase(): Todo? {
-        return database.getTodo()
+    fun getFocus(todo: Todo) {
+        focusedTodo.value = todo
     }
 
     fun onClear() {
-        viewModelScope.launch {
-            clear()
-        }
+        database.clear()
         focusedTodo.value = null
     }
 
-    private suspend fun clear() {
-        database.clear()
+    fun insert() {
+        database.insert()
     }
 
-    private suspend fun insert(todo: Todo) {
-        database.insert(todo)
-    }
-
-    fun insert(input: String = "") {
-        val newTodo = Todo(text = input)
-        viewModelScope.launch {
-            insert(newTodo)
-        }
-    }
-
-    fun update(input: String?, id: Long) {
-        viewModelScope.launch {
-            val todoToUpdate = database.get(id)
-            if (input != null) {
-                todoToUpdate?.text = input
-            }
-            if (todoToUpdate != null) {
-                database.update(todoToUpdate)
-            }
+    fun update(input: String?, id: String) {
+        if (input != null) {
+            database.update(id, input)
         }
     }
 
     fun updateTitle(input: String?) {
-//        viewModelScope.launch {
-//            database.updateTitle(input)
-//        }
-    }
-
-    fun onClickDelete(id: Long) {
-        viewModelScope.launch {
-            val todoToDelete = database.get(id)
-            Timber.i("$todoToDelete")
-            if (todoToDelete != null) {
-                database.delete(todoToDelete)
-            }
+        if (input != null) {
+            database.updateTitle(input)
         }
     }
 
-    fun toggleCheck(id: Long) {
-        viewModelScope.launch {
-            val todoToUpdate = database.get(id)
-            if (todoToUpdate != null) {
-                todoToUpdate.isCompleted = !todoToUpdate.isCompleted
-                database.update(todoToUpdate)
-            }
-        }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun onClickDelete(todoId: String) {
+        database.delete(todoId)
     }
 
+    fun toggleCheck(todoId: String) {
+        database.toggleCheck(todoId)
+    }
 }
