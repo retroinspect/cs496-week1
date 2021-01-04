@@ -12,10 +12,8 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.bumptech.glide.Glide
 import com.example.sample.R
 import jp.wasabeef.blurry.Blurry
 
@@ -37,7 +35,7 @@ class DashboardFragment : Fragment() {
 
         val root: View = inflater.inflate(R.layout.fragment_dashboard, container, false)
         images = root.findViewById(R.id.image_list)
-        var titleImageView: ImageView = root.findViewById(R.id.album_title_image)
+        val titleImageView: ImageView = root.findViewById(R.id.album_title_image)
         val adapter = ImageAdapter()
         val layoutManager = StaggeredGridLayoutManager(3, 1)
 
@@ -53,7 +51,6 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.allImages.observe(
             viewLifecycleOwner
         ) {
-
             it?.let {
                 adapter.data = it
             }
