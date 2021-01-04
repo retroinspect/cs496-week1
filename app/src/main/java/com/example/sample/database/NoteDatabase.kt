@@ -18,13 +18,13 @@ open class Note : RealmObject() {
     var title: String = ""
     var isTodo = false
     var createdAt: Date = Date()
-    var memo: Memo = Memo()
+    var memo: Memo? = null
     var todos: RealmList<Todo> = RealmList()
 }
 
-open class Memo: RealmObject() {
+open class Memo : RealmObject() {
     var desc: String = ""
-    var imgUri: Uri? = null
+    var imgUri: String? = null
 }
 
 open class Todo : RealmObject() {
@@ -44,7 +44,7 @@ class NoteRealmManager(val realm: Realm) {
     /// insert an empty note
     fun insert(isTodo: Boolean): String {
         realm.beginTransaction()
-        val primaryKey =  UUID.randomUUID().toString()
+        val primaryKey = UUID.randomUUID().toString()
         val note = realm.createObject<Note>(primaryKey)
         note.isTodo = isTodo
         realm.commitTransaction()
@@ -124,16 +124,27 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
     }
 
     fun getFocusedTodo(createdAt: Date = Date(Long.MIN_VALUE)): Todo? {
+        if (curNote == null) {
+            curNoteIsNull()
+            return null
+        }
         realm.beginTransaction()
-        var focusedTodo = curNote?.todos?.find { it.createdAt > createdAt }
-        if (focusedTodo == null) focusedTodo = insert()
+        var focusedTodo = curNote.todos.find { it.createdAt > createdAt }
+        if (focusedTodo == null) {
+            focusedTodo = realm.createObject<Todo>(getPrimaryKey())
+            curNote.todos.add(focusedTodo)
+        }
         realm.commitTransaction()
         return focusedTodo
     }
 
     fun update(todoId: String, text: String) {
+        if (curNote == null) {
+            curNoteIsNull()
+            return
+        }
         realm.beginTransaction()
-        val selectedTodo = curNote?.todos?.find { it.todoId == todoId }
+        val selectedTodo = curNote.todos.find { it.todoId == todoId }
         if (selectedTodo != null) {
             selectedTodo.text = text
         }
@@ -141,19 +152,21 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
     }
 
     fun updateTitle(input: String) {
+        if (curNote == null) return
         realm.beginTransaction()
-        if (curNote != null) {
-            curNote.title = input
-        }
+        curNote.title = input
         realm.commitTransaction()
-        Timber.i("should change title to $input")
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun delete(todoId: String) {
+        if (curNote == null) {
+            curNoteIsNull()
+            return
+        }
         realm.beginTransaction()
-        curNote?.todos?.removeIf { it.todoId == todoId }
-        if (curNote?.todos?.isEmpty() == true) {
+        curNote.todos.removeIf { it.todoId == todoId }
+        if (curNote.todos.isEmpty()) {
             val data = realm.createObject<Todo>(getPrimaryKey())
             curNote.todos.add(data)
         }
@@ -168,4 +181,6 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
         }
         realm.commitTransaction()
     }
+
+    private fun curNoteIsNull() = Timber.i("curNote is null: This should not happen")
 }

@@ -22,10 +22,12 @@ import java.util.*
 
 class TodoFragment : Fragment() {
     private lateinit var binding: FragmentTodosBinding
-
     private lateinit var viewModel: TodoViewModel
     val realm: Realm = Realm.getDefaultInstance()
-    val noteManager = NoteRealmManager(realm)
+//    val noteManager = NoteRealmManager(realm)
+//    val noteId = noteManager.insert(false)
+    val noteId = "7827bec4-04df-4da8-bb5a-37bbd5d6fe8a"
+    val dataSource = TodoRealmManager(realm, noteId)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,11 +35,9 @@ class TodoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreate(savedInstanceState)
+        Timber.i("$noteId")
 
         val application = requireNotNull(this.activity).application
-        val noteId = noteManager.insert(false)
-
-        val dataSource = TodoRealmManager(realm, noteId)
 
         val viewModelFactory = TodoViewModelFactory(dataSource, application)
         viewModel = ViewModelProvider(
@@ -62,8 +62,6 @@ class TodoFragment : Fragment() {
         binding.todoList.adapter = adapter
 
         val layoutManager = LinearLayoutManager(context)
-//        layoutManager.reverseLayout = true
-//        layoutManager.stackFromEnd = true
         binding.todoList.layoutManager = layoutManager
 
         return binding.root
