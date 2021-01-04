@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.dashboard.DashboardFragment">
 
+    <ImageView
+        android:id="@+id/album_title_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@drawable/ic_baseline_person_24" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/image_list"
@@ -14,6 +21,8 @@
         android:layout_height="match_parent"
         android:paddingBottom="60dp"
         android:clipToPadding="false"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        tools:srcCompat="@drawable/ic_baseline_calendar_today_24"/>
 
-</RelativeLayout>
+</LinearLayout>
