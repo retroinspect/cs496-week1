@@ -22,13 +22,13 @@ import jp.wasabeef.blurry.Blurry
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
-    lateinit var images : RecyclerView
+    lateinit var images: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         dashboardViewModel =
             ViewModelProvider(this).get(DashboardViewModel::class.java)
 
@@ -37,19 +37,21 @@ class DashboardFragment : Fragment() {
 
         val root: View = inflater.inflate(R.layout.fragment_dashboard, container, false)
         images = root.findViewById(R.id.image_list)
-        var titleImageView : ImageView = root.findViewById(R.id.album_title_image)
+        var titleImageView: ImageView = root.findViewById(R.id.album_title_image)
         val adapter = ImageAdapter()
-        val layoutManager = StaggeredGridLayoutManager(3,1)
+        val layoutManager = StaggeredGridLayoutManager(3, 1)
 
         val totImages = dashboardViewModel.setImages()
         if (totImages.size > 0) {
-            val titleImage : Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, totImages[0].uri)
+            val titleImage: Bitmap =
+                MediaStore.Images.Media.getBitmap(activity?.contentResolver, totImages[0].uri)
             Blurry.with(context).radius(50).from(titleImage).into(titleImageView)
         }
 
         setListener(adapter)
 
-        dashboardViewModel.allImages.observe(viewLifecycleOwner
+        dashboardViewModel.allImages.observe(
+            viewLifecycleOwner
         ) {
 
             it?.let {
@@ -62,7 +64,7 @@ class DashboardFragment : Fragment() {
         return root
     }
 
-    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
             refreshFragment()
@@ -76,7 +78,7 @@ class DashboardFragment : Fragment() {
         images.adapter = adapter
     }
 
-    fun setListener(adapter : ImageAdapter) {
+    fun setListener(adapter: ImageAdapter) {
         adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
             val itemClickIntent = Intent(context, ClickImageActivity::class.java)
 

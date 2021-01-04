@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="clickListener"
+            type="com.example.sample.ui.todo.TodoListener" />
+
+        <variable
+            name="todo"
+            type="com.example.sample.database.Todo" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <CheckBox
+            android:id="@+id/checkbox_todo"
+            android:layout_width="@dimen/small_size"
+            android:layout_height="@dimen/small_size"
+            android:gravity="center"
+            android:textColorHighlight="@color/purple_700"
+            android:textColorLink="@color/purple_500"
+            app:buttonTint="@color/purple_200"
+            tools:checked="true" />
+
+        <LinearLayout
+            android:layout_width="264dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text_todo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:visibility="gone"
+                tools:text="text" />
+
+            <EditText
+                android:id="@+id/edit_text_todo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:autofillHints=""
+                android:background="@android:color/transparent"
+                android:gravity="start"
+                android:hint="@string/empty_hint"
+                android:inputType="textMultiLine"
+                android:keepScreenOn="false"
+                android:textSize="@dimen/small_font"
+                tools:text="edit_text" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/delete_button"
+            android:visibility="invisible"
+            android:layout_width="@dimen/small_size"
+            android:layout_height="@dimen/small_size"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/delete_button_desc"
+            android:gravity="center"
+            android:onClick="@{() -> clickListener.onClick(todo)}"
+            android:tint="@color/design_default_color_primary"
+            app:srcCompat="@android:drawable/ic_delete"
+            tools:srcCompat="@android:drawable/ic_delete" />
+    </LinearLayout>
+
+</layout>

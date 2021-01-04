@@ -9,4 +9,14 @@
     <string name="name">이름</string>
     <string name="name_example">홍길동</string>
     <string name="add_phone_number">전화번호 추가</string>
+    <string name="title_todo">My todo list</string>
+    <string name="create_todo_hint">할 일을 적어봐요</string>
+    <string name="auto_fill_hint">코딩하기</string>
+    <string name="delete_button_desc">Delete button</string>
+    <string name="todo_text">coding</string>
+    <string name="clear_button">clear_button</string>
+    <string name="empty_hint">" "</string>
+    <string name="create_todo_button">create_todo_button</string>
+    <string name="create_todo_text">새로운 할 일</string>
+    <string name="todo_title_hint">오늘 할 일</string>
 </resources>
