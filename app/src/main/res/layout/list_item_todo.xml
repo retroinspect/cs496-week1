@@ -23,8 +23,8 @@
 
         <CheckBox
             android:id="@+id/checkbox_todo"
-            android:layout_width="@dimen/small_size"
-            android:layout_height="@dimen/small_size"
+            android:layout_width="@dimen/medium_size"
+            android:layout_height="@dimen/medium_size"
             android:gravity="center"
             android:textColorHighlight="@color/purple_700"
             android:textColorLink="@color/purple_500"
@@ -66,8 +66,8 @@
         <ImageButton
             android:id="@+id/delete_button"
             android:visibility="invisible"
-            android:layout_width="@dimen/small_size"
-            android:layout_height="@dimen/small_size"
+            android:layout_width="@dimen/medium_size"
+            android:layout_height="@dimen/medium_size"
             android:background="@android:color/transparent"
             android:contentDescription="@string/delete_button_desc"
             android:gravity="center"
