@@ -1,32 +1,22 @@
 package com.example.sample.ui.dashboard
 
-import android.content.ContentUris
+import android.app.Activity
 import android.content.Intent
-import android.content.Intent.getIntent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.concurrent.schedule
 
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
+    lateinit var images : RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,38 +27,44 @@ class DashboardFragment : Fragment() {
             ViewModelProvider(this).get(DashboardViewModel::class.java)
 
         val root: View = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val images: RecyclerView = root.findViewById(R.id.image_list)
+        images = root.findViewById(R.id.image_list)
         val adapter = ImageAdapter()
         val layoutManager = LinearLayoutManager(context)
+        val allImage = dashboardViewModel.setImages()
 
-        dashboardViewModel.getAllImages().observe(viewLifecycleOwner
+        adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
+            val itemClickIntent = Intent(context, ClickImageActivity::class.java)
+
+            override fun onClick(view: View, position: Int) {
+                itemClickIntent.putExtra("image_uri", allImage[position].uri.toString())
+                itemClickIntent.putExtra("image_title", allImage[position].title)
+                startActivityForResult(itemClickIntent, 10001)
+            }
+        })
+
+        dashboardViewModel.allImages.observe(viewLifecycleOwner
         ) {
+
             it?.let {
                 adapter.data = it
-                adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
-                    val itemClickIntent = Intent(context, ClickImageActivity::class.java)
-
-                    override fun onClick(view: View, position: Int) {
-                        itemClickIntent.putExtra("image_uri", it[position].uri.toString())
-                        itemClickIntent.putExtra("image_title", it[position].title)
-                        Log.i("Log test", "before startActivity")
-                        startActivity(itemClickIntent)
-                        Log.i("Log test", "finish activity")
-                        refreshFragment()
-                    }
-                })
             }
         }
-
         images.adapter = adapter
         images.setHasFixedSize(true)
-        images.setLayoutManager(layoutManager)
-
+        images.layoutManager = layoutManager
         return root
     }
 
+    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
+            refreshFragment()
+        }
+    }
+
     fun refreshFragment() {
-        var ft: FragmentTransaction? = getFragmentManager()?.beginTransaction()
-        ft?.detach(this)?.attach(this)?.commit()
+        val adapter = ImageAdapter()
+        adapter.data = dashboardViewModel.getAllImages()
+        images.adapter = adapter
     }
 }

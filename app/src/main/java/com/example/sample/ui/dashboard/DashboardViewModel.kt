@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 
@@ -12,10 +13,10 @@ class DashboardViewModel(
 ) : AndroidViewModel(application) {
 
     private val context = getApplication<Application>().applicationContext
-    private var allImages : MutableLiveData<ArrayList<ImageModel>> = MutableLiveData()
-    private var images = ArrayList<ImageModel>()
+    var allImages : MutableLiveData<ArrayList<ImageModel>> = MutableLiveData()
 
-    fun getAllImages() : MutableLiveData<ArrayList<ImageModel>> {
+    fun getAllImages() : ArrayList<ImageModel> {
+        var images : ArrayList<ImageModel> = ArrayList<ImageModel>()
         var projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DATE_ADDED,
@@ -44,11 +45,17 @@ class DashboardViewModel(
                 val contentUri: Uri =
                     ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                 val imageModel = ImageModel(contentUri, title)
+                Log.i("refresh", title)
                 images.add(imageModel)
             }
             cursor.close()
         }
-        allImages.setValue(images)
-        return allImages
+        return images
+    }
+
+    fun setImages() : ArrayList<ImageModel> {
+        val allImage : ArrayList<ImageModel> = getAllImages()
+        allImages.setValue(allImage)
+        return allImage
     }
 }

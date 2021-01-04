@@ -1,5 +1,6 @@
 package com.example.sample.ui.dashboard
 
+import android.app.Activity
 import android.content.ContentProviderOperation
 import android.content.DialogInterface
 import android.content.Intent
@@ -70,7 +71,7 @@ class ClickImageActivity : AppCompatActivity() {
                 }
                 this.getContentResolver().applyBatch(MediaStore.AUTHORITY, ops)
                 Toast.makeText(this, "수정되었습니다", Toast.LENGTH_LONG).show()
-                Log.i("ClickActivity","edit finish")
+                setResult(Activity.RESULT_OK)
                 finish()
             }
             return true

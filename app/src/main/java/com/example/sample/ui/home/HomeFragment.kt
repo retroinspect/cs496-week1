@@ -1,5 +1,6 @@
 package com.example.sample.ui.home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -16,6 +17,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
+import com.example.sample.ui.dashboard.ImageAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
@@ -23,6 +25,7 @@ class HomeFragment : Fragment() {
     var sortText = "asc"
 
     private lateinit var homeViewModel: HomeViewModel
+    lateinit var phones : RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +37,7 @@ class HomeFragment : Fragment() {
         val root: View = inflater.inflate(R.layout.fragment_home, container, false)
 
         //setList()
-        val phones : RecyclerView = root.findViewById(R.id.phone_list)
+        phones = root.findViewById(R.id.phone_list)
         val adapter = PhoneAdapter()
         homeViewModel.setList(sortText, searchText)
 
@@ -54,7 +57,7 @@ class HomeFragment : Fragment() {
         val addButton : FloatingActionButton = root.findViewById(R.id.phone_add_button)
         addButton.setOnClickListener {
             val addButtonIntent = Intent(context, CreateActivity::class.java)
-            startActivity(addButtonIntent)
+            startActivityForResult(addButtonIntent,10001)
         }
 
         homeViewModel.allNumbers.observe(viewLifecycleOwner
@@ -67,5 +70,18 @@ class HomeFragment : Fragment() {
         phones.layoutManager = LinearLayoutManager(context)
 
         return root
+    }
+
+    override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
+            refreshFragment()
+        }
+    }
+
+    fun refreshFragment() {
+        val adapter = PhoneAdapter()
+        adapter.data = homeViewModel.getPhoneNumbers(sortText, searchText)
+        phones.adapter = adapter
     }
 }

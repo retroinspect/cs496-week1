@@ -1,5 +1,6 @@
 package com.example.sample.ui.home
 
+import android.app.Activity
 import android.content.ContentProviderOperation
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -44,6 +45,7 @@ class CreateActivity : AppCompatActivity() {
             ops.add(op.build())
             this.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops)
             Toast.makeText(this, "저장되었습니다", Toast.LENGTH_LONG).show()
+            setResult(Activity.RESULT_OK)
             finish()
             onResume()
         }
