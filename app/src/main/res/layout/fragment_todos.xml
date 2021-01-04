@@ -77,30 +77,6 @@
             android:layout_height="320dp"
             android:layout_marginTop="8dp" />
 
-        <LinearLayout
-            android:id="@+id/create_todo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="100dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/create_todo_button"
-                app:srcCompat="@android:drawable/ic_menu_add"
-                tools:srcCompat="@android:drawable/ic_menu_add" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/create_todo_text" />
-        </LinearLayout>
 
     </LinearLayout>
 
