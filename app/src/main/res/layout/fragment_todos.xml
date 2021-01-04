@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="288dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -77,6 +77,12 @@
             android:layout_width="match_parent"
             android:layout_height="320dp"
             android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/sub_window"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="세부화면으로 이동"/>
 
 
     </LinearLayout>

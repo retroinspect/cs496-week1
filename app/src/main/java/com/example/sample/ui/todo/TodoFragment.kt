@@ -1,13 +1,13 @@
 package com.example.sample.ui.todo
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
@@ -20,19 +20,23 @@ import com.example.sample.database.NoteRealmManager
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
 import com.example.sample.databinding.FragmentTodosBinding
+import com.example.sample.ui.dashboard.ClickImageActivity
+import com.example.sample.ui.dashboard.ImageAdapter
 import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import java.util.*
+import java.util.zip.Inflater
 
 class TodoFragment : Fragment() {
     private lateinit var binding: FragmentTodosBinding
     private lateinit var viewModel: TodoViewModel
     val realm: Realm = Realm.getDefaultInstance()
 
-    //    val noteManager = NoteRealmManager(realm)
+    val noteManager = NoteRealmManager(realm)
+//    val noteId : String = noteManager.insert(false)
 
-//    val noteId = noteManager.insert(false)
-    val noteId = "7827bec4-04df-4da8-bb5a-37bbd5d6fe8a"
+    val noteId = "50b02432-89fd-4ea9-a90c-c98fb7f18120"
     val dataSource = TodoRealmManager(realm, noteId)
 
     override fun onCreateView(
@@ -41,7 +45,7 @@ class TodoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreate(savedInstanceState)
-        Timber.i("$noteId")
+        Timber.i("note test " + "$noteId")
 
         val application = requireNotNull(this.activity).application
 
@@ -72,8 +76,15 @@ class TodoFragment : Fragment() {
             binding.titleTodo.visibility = GONE
         }
 
+        //임시 세부화면 버튼
+        binding.subWindow.setOnClickListener {
+            val oneNoteIntent = Intent(context, ClickNoteActivity::class.java)
+
+            startActivityForResult(oneNoteIntent, 10001)
+        }
+
         val title = dataSource.getTitle()
-        if (title != null) {
+        if (title != null && title.isNotEmpty()) {
             binding.titleTodo.text = title
             binding.editTitleTodo.setText(title)
         }

@@ -15,6 +15,7 @@ class TodoViewModel(
 ) : AndroidViewModel(application) {
 
     private var focusedTodo = MutableLiveData<Todo>()
+    var noteId = MutableLiveData<String>()
 
     init {
         focusedTodo.value = database.getFocusedTodo()
