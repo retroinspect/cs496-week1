@@ -12,8 +12,8 @@
         android:title="@string/title_dashboard" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_notes"
         android:icon="@drawable/ic_baseline_calendar_today_24"
-        android:title="@string/title_notifications" />
+        android:title="@string/title_notes" />
 
 </menu>

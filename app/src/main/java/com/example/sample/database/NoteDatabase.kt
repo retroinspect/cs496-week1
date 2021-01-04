@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.RealmResults
 import io.realm.annotations.PrimaryKey
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
@@ -59,7 +60,7 @@ class NoteRealmManager(val realm: Realm) {
         return realm.where<Note>().findFirst()
     }
 
-    fun getAllNotes(): List<Note> {
+    fun getAllNotes(): RealmResults<Note> {
         return realm.where<Note>().findAll()
     }
 
@@ -76,6 +77,11 @@ class NoteRealmManager(val realm: Realm) {
         realm.commitTransaction()
     }
 
+    fun clear() {
+        realm.beginTransaction()
+        realm.deleteAll()
+        realm.commitTransaction()
+    }
 }
 
 class TodoRealmManager(val realm: Realm, noteId: String) {
