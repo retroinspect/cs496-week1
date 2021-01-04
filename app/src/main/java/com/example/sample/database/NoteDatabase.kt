@@ -1,5 +1,6 @@
 package com.example.sample.database
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import io.realm.Realm
@@ -12,15 +13,18 @@ import timber.log.Timber
 import java.util.*
 
 open class Note : RealmObject() {
-
     @PrimaryKey
     var id: String = UUID.randomUUID().toString()
     var title: String = ""
     var isTodo = false
     var createdAt: Date = Date()
-
+    var memo: Memo = Memo()
     var todos: RealmList<Todo> = RealmList()
+}
+
+open class Memo: RealmObject() {
     var desc: String = ""
+    var imgUri: Uri? = null
 }
 
 open class Todo : RealmObject() {
@@ -38,12 +42,13 @@ open class Todo : RealmObject() {
 
 class NoteRealmManager(val realm: Realm) {
     /// insert an empty note
-    fun insert(isTodo: Boolean, idForDebug: String? = null) {
+    fun insert(isTodo: Boolean): String {
         realm.beginTransaction()
-        val primaryKey = UUID.randomUUID().toString()
+        val primaryKey =  UUID.randomUUID().toString()
         val note = realm.createObject<Note>(primaryKey)
         note.isTodo = isTodo
         realm.commitTransaction()
+        return primaryKey
     }
 
     fun get(id: String): Note? {
@@ -73,11 +78,11 @@ class NoteRealmManager(val realm: Realm) {
 
 }
 
-class TodoRealmManager(val realm: Realm, private val noteId: String) {
+class TodoRealmManager(val realm: Realm, noteId: String) {
 
     val curNote: Note? = realm.where<Note>().equalTo("id", noteId).findFirst()
 
-    fun getPrimaryKey(): String = UUID.randomUUID().toString()
+    private fun getPrimaryKey(): String = UUID.randomUUID().toString()
 
     /// clear todo list
     fun clear() {
@@ -150,7 +155,7 @@ class TodoRealmManager(val realm: Realm, private val noteId: String) {
         curNote?.todos?.removeIf { it.todoId == todoId }
         if (curNote?.todos?.isEmpty() == true) {
             val data = realm.createObject<Todo>(getPrimaryKey())
-            curNote?.todos?.add(data)
+            curNote.todos.add(data)
         }
         realm.commitTransaction()
     }

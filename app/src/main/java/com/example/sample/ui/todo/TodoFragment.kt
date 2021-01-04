@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sample.R
-import com.example.sample.Util
-import com.example.sample.database.Note
 import com.example.sample.database.NoteRealmManager
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
@@ -37,41 +35,23 @@ class TodoFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val application = requireNotNull(this.activity).application
-        val noteId = "default"
-
-        Timber.i("creating a note...")
-        noteManager.insert(false)
-        val note = noteManager.getFocusedNote()
-        if (note != null) {
-            Timber.i("created a note of ${note.id}")
-        } else {
-            Timber.i("No note in realm")
-        }
-
-//        val root: View = inflater.inflate(R.layout.hello_world, container, false)
-//        return root
+        val noteId = noteManager.insert(false)
 
         val dataSource = TodoRealmManager(realm, noteId)
-        Timber.i(
-            "curNote: ${
-                dataSource.curNote?.id.toString()
-            }"
-        )
 
         val viewModelFactory = TodoViewModelFactory(dataSource, application)
         viewModel = ViewModelProvider(
             this, viewModelFactory
         ).get(TodoViewModel::class.java)
-//
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_todos, container, false)
         binding.todoViewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.createTodo.setOnClickListener { viewModel.insert() }
-
         val adapter =
             dataSource.getAllTodos()?.let {
-                TodoAdapter(TodoActions(viewModel, binding, context),
+                TodoAdapter(
+                    TodoActions(viewModel, context),
                     it
                 )
             }
@@ -97,7 +77,6 @@ class TodoFragment : Fragment() {
 
 class TodoActions(
     val viewModel: TodoViewModel,
-    val binding: FragmentTodosBinding,
     val context: Context?
 ) {
     @RequiresApi(Build.VERSION_CODES.N)
@@ -111,7 +90,6 @@ class TodoActions(
 
     val updateTodo = { todoId: String, input: String -> viewModel.update(input, todoId) }
     val insertTodo = { viewModel.insert() }
-    val hideKeyboard = { Util.hideKeyboard(context, binding.root) }
 
     val hasFocus = { todo: Todo -> viewModel.hasFocus(todo) }
     val getFocus = { todo: Todo -> viewModel.getFocus(todo) }
@@ -119,6 +97,6 @@ class TodoActions(
         viewModel.setFocus(createdAt)
     }
 
-    val updateTitle = { input: String -> viewModel.updateTitle(input) }
+//    val updateTitle = { input: String -> viewModel.updateTitle(input) }
 
 }
