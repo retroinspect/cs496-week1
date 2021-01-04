@@ -41,24 +41,24 @@ class DashboardFragment : Fragment() {
         val adapter = ImageAdapter()
         val layoutManager = LinearLayoutManager(context)
 
-        dashboardViewModel.getAllImages().observe(viewLifecycleOwner,
-            {
-                it?.let {
-                    adapter.data = it
-                    adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
-                        val itemClickIntent = Intent(context, ClickImageActivity::class.java)
+        dashboardViewModel.getAllImages().observe(viewLifecycleOwner
+        ) {
+            it?.let {
+                adapter.data = it
+                adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
+                    val itemClickIntent = Intent(context, ClickImageActivity::class.java)
 
-                        override fun onClick(view: View, position: Int) {
-                            itemClickIntent.putExtra("image_uri", it[position].uri.toString())
-                            itemClickIntent.putExtra("image_title", it[position].title)
-                            Log.i("Log test", "before startActivity")
-                            startActivity(itemClickIntent)
-                            Log.i("Log test", "finish activity")
-                            refreshFragment()
-                        }
-                    })
-                }
-            })
+                    override fun onClick(view: View, position: Int) {
+                        itemClickIntent.putExtra("image_uri", it[position].uri.toString())
+                        itemClickIntent.putExtra("image_title", it[position].title)
+                        Log.i("Log test", "before startActivity")
+                        startActivity(itemClickIntent)
+                        Log.i("Log test", "finish activity")
+                        refreshFragment()
+                    }
+                })
+            }
+        }
 
         images.adapter = adapter
         images.setHasFixedSize(true)
