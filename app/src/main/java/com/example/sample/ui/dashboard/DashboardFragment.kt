@@ -44,7 +44,7 @@ class DashboardFragment : Fragment() {
         val totImages = dashboardViewModel.setImages()
         if (totImages.size > 0) {
             val titleImage : Bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, totImages[0].uri)
-            Blurry.with(context).radius(10).from(titleImage).into(titleImageView)
+            Blurry.with(context).radius(50).from(titleImage).into(titleImageView)
         }
 
         setListener(adapter)
