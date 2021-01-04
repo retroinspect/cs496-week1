@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import kotlin.collections.ArrayList
 
 class DashboardViewModel(
     application: Application

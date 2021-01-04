@@ -30,17 +30,9 @@ class DashboardFragment : Fragment() {
         images = root.findViewById(R.id.image_list)
         val adapter = ImageAdapter()
         val layoutManager = LinearLayoutManager(context)
-        val allImage = dashboardViewModel.setImages()
+        dashboardViewModel.setImages()
 
-        adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
-            val itemClickIntent = Intent(context, ClickImageActivity::class.java)
-
-            override fun onClick(view: View, position: Int) {
-                itemClickIntent.putExtra("image_uri", allImage[position].uri.toString())
-                itemClickIntent.putExtra("image_title", allImage[position].title)
-                startActivityForResult(itemClickIntent, 10001)
-            }
-        })
+        setListener(adapter)
 
         dashboardViewModel.allImages.observe(viewLifecycleOwner
         ) {
@@ -65,6 +57,19 @@ class DashboardFragment : Fragment() {
     fun refreshFragment() {
         val adapter = ImageAdapter()
         adapter.data = dashboardViewModel.getAllImages()
+        setListener(adapter)
         images.adapter = adapter
+    }
+
+    fun setListener(adapter : ImageAdapter) {
+        adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
+            val itemClickIntent = Intent(context, ClickImageActivity::class.java)
+
+            override fun onClick(view: View, position: Int) {
+                itemClickIntent.putExtra("image_uri", adapter.data[position].uri.toString())
+                itemClickIntent.putExtra("image_title", adapter.data[position].title)
+                startActivityForResult(itemClickIntent, 10001)
+            }
+        })
     }
 }
