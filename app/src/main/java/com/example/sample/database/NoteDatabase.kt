@@ -151,11 +151,17 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
         realm.commitTransaction()
     }
 
+    fun getTitle(): String? {
+        if (curNote == null) return null
+        return curNote.title
+    }
+
     fun updateTitle(input: String) {
         if (curNote == null) return
         realm.beginTransaction()
         curNote.title = input
         realm.commitTransaction()
+        Timber.i("title changed to ${input}")
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

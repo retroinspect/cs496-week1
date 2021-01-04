@@ -3,8 +3,11 @@ package com.example.sample.ui.todo
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
@@ -12,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sample.R
+import com.example.sample.Util
 import com.example.sample.database.NoteRealmManager
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
@@ -24,7 +28,8 @@ class TodoFragment : Fragment() {
     private lateinit var binding: FragmentTodosBinding
     private lateinit var viewModel: TodoViewModel
     val realm: Realm = Realm.getDefaultInstance()
-//    val noteManager = NoteRealmManager(realm)
+
+    //    val noteManager = NoteRealmManager(realm)
 //    val noteId = noteManager.insert(false)
     val noteId = "7827bec4-04df-4da8-bb5a-37bbd5d6fe8a"
     val dataSource = TodoRealmManager(realm, noteId)
@@ -60,6 +65,36 @@ class TodoFragment : Fragment() {
             Timber.i("Invalid note id")
 
         binding.todoList.adapter = adapter
+
+        binding.titleTodo.setOnClickListener {
+            binding.editTitleTodo.visibility = VISIBLE
+            binding.titleTodo.visibility = GONE
+        }
+
+        val title = dataSource.getTitle()
+        if (title != null) {
+            binding.titleTodo.text = title
+            binding.editTitleTodo.setText(title)
+        }
+        else {
+            binding.titleTodo.text = ""
+            binding.editTitleTodo.visibility = VISIBLE
+            binding.titleTodo.visibility = GONE
+        }
+        binding.editTitleTodo.setOnKeyListener { _: View, keyCode: Int, event: KeyEvent ->
+            val input = binding.editTitleTodo.text.toString()
+            if (Util.isEnterPressedDown(keyCode, event)) {
+                viewModel.updateTitle(input)
+                binding.titleTodo.text = input
+                binding.editTitleTodo.clearFocus()
+                binding.editTitleTodo.visibility = GONE
+                binding.titleTodo.visibility = VISIBLE
+                Util.hideKeyboard(context, binding.root)
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
+
 
         val layoutManager = LinearLayoutManager(context)
         binding.todoList.layoutManager = layoutManager

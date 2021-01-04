@@ -38,7 +38,7 @@
                     android:layout_marginEnd="8dp"
                     android:gravity="start"
                     android:textSize="@dimen/todo_title"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     tools:text="@string/title_todo" />
 
                 <EditText
@@ -49,6 +49,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
+                    android:visibility="gone"
                     android:autofillHints="@string/todo_title_hint"
                     android:background="@android:color/transparent"
                     android:gravity="start"
