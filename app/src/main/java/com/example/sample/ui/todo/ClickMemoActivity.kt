@@ -13,17 +13,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.sample.R
 import timber.log.Timber
 
-class ClickNoteActivity : AppCompatActivity() {
+class ClickMemoActivity : AppCompatActivity() {
     lateinit var mainIntent : Intent
     lateinit var titleView : EditText
     lateinit var contentsView : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.click_notes)
-        //mainIntent = getIntent()
+        setContentView(R.layout.click_memo)
+        mainIntent = getIntent()
         titleView = findViewById(R.id.edit_note_title) as EditText
         contentsView = findViewById(R.id.edit_note_contents) as EditText
+        titleView.setText(mainIntent.getStringExtra("before_edit_title"))
+        contentsView.setText(mainIntent.getStringExtra("before_edit_contents"))
     }
 
     override fun onCreateOptionsMenu(menu : Menu) : Boolean {

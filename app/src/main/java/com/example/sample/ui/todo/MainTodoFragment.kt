@@ -16,17 +16,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sample.R
 import com.example.sample.Util
+import com.example.sample.database.Note
 import com.example.sample.database.NoteRealmManager
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
 import com.example.sample.databinding.FragmentTodosBinding
-import com.example.sample.ui.dashboard.ClickImageActivity
-import com.example.sample.ui.dashboard.ImageAdapter
 import io.realm.Realm
-import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import java.util.*
-import java.util.zip.Inflater
 
 class TodoFragment : Fragment() {
     private lateinit var binding: FragmentTodosBinding
@@ -78,9 +75,21 @@ class TodoFragment : Fragment() {
 
         //임시 세부화면 버튼
         binding.subWindow.setOnClickListener {
-            val oneNoteIntent = Intent(context, ClickNoteActivity::class.java)
-
-            startActivityForResult(oneNoteIntent, 10001)
+            val note = noteManager.get(id) //id : setItemListener에서 가져와야 함!
+            if (note?.isTodo == true) {
+                //TodoActivity
+                val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
+                oneTodoIntent.putExtra("before_edit_title", note.title)
+                oneTodoIntent.putExtra("before_edit_contexts", note.todos) //to-do type 전달 가능하도록 수정해야 함
+                startActivityForResult(oneTodoIntent, 10001)
+            }
+            else if (note?.isTodo == false) {
+                //MemoActivity
+                val oneMemoIntent = Intent(context, ClickMemoActivity::class.java)
+                oneMemoIntent.putExtra("before_edit_title", note.title)
+                oneMemoIntent.putExtra("before_edit_contexts", note.memo?.desc)
+                startActivityForResult(oneMemoIntent, 10002)
+            }
         }
 
         val title = dataSource.getTitle()
