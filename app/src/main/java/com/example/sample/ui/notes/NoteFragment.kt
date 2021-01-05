@@ -1,10 +1,12 @@
 package com.example.sample.ui.notes
 
+import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore.Video
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +27,7 @@ class NoteFragment : Fragment() {
     private lateinit var binding: FragmentNotesBinding
     val realm: Realm = Realm.getDefaultInstance()
     val noteManager = NoteRealmManager(realm)
+    var isFabOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,22 +56,57 @@ class NoteFragment : Fragment() {
         binding.noteList.adapter = adapter
         val layoutManager = StaggeredGridLayoutManager(2, 1)
         binding.noteList.layoutManager = layoutManager
+
+        //fab sub button 생성해야함
+
+        binding.noteAddButton.setOnClickListener {
+            toggleFab()
+        }
         binding.createMemoButton.setOnClickListener {
-            noteManager.insert(false)
+            toggleFab()
+            val newMemoId : String = noteManager.insert(false)
+            val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
+            oneTodoIntent.putExtra("todo_id", newMemoId)
+            context?.startActivity(oneTodoIntent)
         }
         binding.createTodoListButton.setOnClickListener {
-            noteManager.insert(true)
+            toggleFab()
+            val newTodoId : String = noteManager.insert(true)
+            val oneMemoIntent = Intent(context, ClickMemoActivity::class.java)
+            oneMemoIntent.putExtra("memo_id", newTodoId)
+            context?.startActivity(oneMemoIntent)
         }
-        binding.clearNoteButton.setOnClickListener {
+        binding.clearTodoAll.setOnClickListener {
             noteManager.clear()
         }
-
         return binding.root
     }
 
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
+    }
+
+    fun toggleFab() {
+        if (isFabOpen) {
+            val fab_close = AnimationUtils.loadAnimation(context, R.anim.fab_close)
+
+            binding.noteAddButton.setImageResource(R.drawable.ic_baseline_add_24)
+            binding.createMemoButton.startAnimation(fab_close)
+            binding.createTodoListButton.startAnimation(fab_close)
+            binding.createMemoButton.setClickable(false)
+            binding.createTodoListButton.setClickable(false)
+            isFabOpen = false
+        } else {
+            val fab_open = AnimationUtils.loadAnimation(context, R.anim.fab_open)
+
+            binding.noteAddButton.setImageResource(R.drawable.ic_baseline_close_24)
+            binding.createMemoButton.startAnimation(fab_open)
+            binding.createTodoListButton.startAnimation(fab_open)
+            binding.createMemoButton.setClickable(true)
+            binding.createTodoListButton.setClickable(true)
+            isFabOpen = true
+        }
     }
 }
 
