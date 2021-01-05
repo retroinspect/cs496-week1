@@ -51,7 +51,7 @@ class DashboardViewModel(
 
     fun setImages() : ArrayList<ImageModel> {
         val allImage : ArrayList<ImageModel> = getAllImages()
-        allImages.setValue(allImage)
+        allImages.value = allImage
         return allImage
     }
 }

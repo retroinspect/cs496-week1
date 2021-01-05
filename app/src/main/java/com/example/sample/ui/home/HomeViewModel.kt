@@ -24,7 +24,7 @@ class HomeViewModel(
         var wheneClause:String? = null
         var whereValues:Array<String>? = null
         //검색 내용 있을 경우 검색 사용
-        if(searchName?.isNotEmpty() ?: false) {
+        if(searchName?.isNotEmpty() == true) {
             wheneClause = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " like ?"
             whereValues = arrayOf("%$searchName%")
         }
@@ -71,6 +71,6 @@ class HomeViewModel(
     }
 
     fun setList(sortText : String, searchText : String) {
-        allNumbers.setValue(getPhoneNumbers(sortText, searchText))
+        allNumbers.value = getPhoneNumbers(sortText, searchText)
     }
 }

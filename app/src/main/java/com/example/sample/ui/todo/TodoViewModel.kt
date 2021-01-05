@@ -3,11 +3,13 @@ package com.example.sample.ui.todo
 import android.app.Application
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
 import java.util.*
-import kotlin.collections.ArrayList
 
 class TodoViewModel(
     val database: TodoRealmManager,
@@ -37,28 +39,18 @@ class TodoViewModel(
         focusedTodo.value = null
     }
 
-    fun insert() {
-        database.insert()
-    }
+}
 
-    fun update(input: String?, id: String) {
-        if (input != null) {
-            database.update(id, input)
+class TodoViewModelFactory(
+    private val todoRealmManager: TodoRealmManager,
+    private val application: Application
+) : ViewModelProvider.Factory {
+    @Suppress("unchecked_cast")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
+            return TodoViewModel(todoRealmManager, application) as T
         }
-    }
-
-    fun updateTitle(input: String?) {
-        if (input != null) {
-            database.updateTitle(input)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun onClickDelete(todoId: String) {
-        database.delete(todoId)
-    }
-
-    fun toggleCheck(todoId: String) {
-        database.toggleCheck(todoId)
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+

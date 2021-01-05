@@ -32,9 +32,9 @@ class ClickImageActivity : AppCompatActivity() {
 
         setContentView(R.layout.click_image)
 
-        mainIntent = getIntent()
+        mainIntent = intent
 
-        var imageOne = findViewById(R.id.image_item_one) as SubsamplingScaleImageView
+        var imageOne = findViewById<SubsamplingScaleImageView>(R.id.image_item_one)
 
         val imageUriString = mainIntent.getStringExtra("image_uri")
         val imageTitle : String? = mainIntent.getStringExtra("image_title")
@@ -57,8 +57,8 @@ class ClickImageActivity : AppCompatActivity() {
         val selected = item.itemId
         if (selected == R.id.navigation_image_title_edit) {
             setContentView(R.layout.image_title_edit)
-            var editTitle = findViewById(R.id.edit_image_title) as EditText
-            var editSaveButton = findViewById(R.id.edit_image_save_button) as Button
+            var editTitle = findViewById<EditText>(R.id.edit_image_title)
+            var editSaveButton = findViewById<Button>(R.id.edit_image_save_button)
             editTitle.setText(imageTitle)
 
             editSaveButton.setOnClickListener {
@@ -72,7 +72,7 @@ class ClickImageActivity : AppCompatActivity() {
                         .withValue(MediaStore.Images.Media.TITLE, edited)
                     ops.add(op.build())
                 }
-                this.getContentResolver().applyBatch(MediaStore.AUTHORITY, ops)
+                this.contentResolver.applyBatch(MediaStore.AUTHORITY, ops)
                 Toast.makeText(this, "수정되었습니다", Toast.LENGTH_LONG).show()
                 setResult(Activity.RESULT_OK)
                 finish()
@@ -91,18 +91,18 @@ class ClickImageActivity : AppCompatActivity() {
                 //kakaotalk 미설치 에러
                 var kakaoAlertBuilder : AlertDialog.Builder = AlertDialog.Builder(this)
                 kakaoAlertBuilder.setTitle("공유할 수 없음")
-                kakaoAlertBuilder.setMessage("이 디바이스에 Kakao Talk이 설치되어있지 않습니다.\n설치하시겠습니까?")
+                kakaoAlertBuilder.setMessage("이 디바이스에 Kakao Talk 이 설치되어있지 않습니다.\n설치하시겠습니까?")
                 kakaoAlertBuilder.setPositiveButton("예", object: DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
                         val installIntent = Intent(Intent.ACTION_VIEW)
                         installIntent.addCategory(Intent.CATEGORY_DEFAULT)
-                        installIntent.setData(Uri.parse("market://details?id=com.kakao.talk"))
+                        installIntent.data = Uri.parse("market://details?id=com.kakao.talk")
                         startActivity(installIntent)
                     }
                 })
                 kakaoAlertBuilder.setNegativeButton("아니오", object: DialogInterface.OnClickListener {
                     override fun onClick(dialog: DialogInterface?, which: Int) {
-                        Toast.makeText(getApplicationContext(),"Pressed Cancel", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext,"Pressed Cancel", Toast.LENGTH_SHORT).show()
                     }
                 })
                 kakaoAlertBuilder.create().show()
