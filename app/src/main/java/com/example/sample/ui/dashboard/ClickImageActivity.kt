@@ -1,15 +1,18 @@
 package com.example.sample.ui.dashboard
 
+import android.app.ActionBar
 import android.app.Activity
 import android.content.ContentProviderOperation
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast

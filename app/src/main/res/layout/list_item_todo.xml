@@ -26,9 +26,9 @@
             android:layout_width="@dimen/medium_size"
             android:layout_height="@dimen/medium_size"
             android:gravity="center"
-            android:textColorHighlight="@color/purple_700"
-            android:textColorLink="@color/purple_500"
-            app:buttonTint="@color/purple_200"
+            android:textColorHighlight="@color/second_tap_color"
+            android:textColorLink="@color/second_tap_color"
+            app:buttonTint="@color/second_tap_color"
             tools:checked="true" />
 
         <LinearLayout
@@ -71,7 +71,7 @@
             android:contentDescription="@string/delete_button_desc"
             android:gravity="center"
             android:onClick="@{() -> clickListener.onClick(todo)}"
-            android:tint="@color/design_default_color_primary"
+            android:tint="@color/second_tap_color"
             app:srcCompat="@android:drawable/ic_delete"
             tools:srcCompat="@android:drawable/ic_delete" />
     </LinearLayout>

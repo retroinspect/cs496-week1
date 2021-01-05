@@ -15,7 +15,8 @@
         android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/main_color">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -81,9 +82,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="20dp"
                 android:layout_marginRight="20dp"
-                android:backgroundTint="#009688"
-                android:src="@drawable/ic_baseline_add_24"
+                android:backgroundTint="@color/fab_color"
                 app:borderWidth="0dp"
+                android:src="@drawable/ic_baseline_add_24"
                 app:fabSize="normal"  />
 
         </RelativeLayout>

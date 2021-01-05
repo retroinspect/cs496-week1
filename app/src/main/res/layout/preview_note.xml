@@ -11,6 +11,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/memo_color1"
         app:cardCornerRadius="10dp">
 
         <LinearLayout
@@ -25,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textSize="@dimen/small_font"
+                android:textColor="@color/text_color"
                 tools:text="@string/title_preview_note" />
 
             <TextView
@@ -35,6 +37,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="start"
                 android:textSize="@dimen/preview_font"
+                android:textColor="@color/fab_color"
                 tools:text="@string/desc_preview_note" />
 
             <LinearLayout

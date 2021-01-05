@@ -10,20 +10,24 @@
     <EditText
         android:id="@+id/edit_memo_title"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:hint="Title"/>
 
     <EditText
         android:id="@+id/edit_memo_contents"
         android:layout_width="match_parent"
-        android:layout_height="470dp"
+        android:layout_height="0dp"
+        android:layout_weight="10"
         android:hint="Contents"/>
 
     <Button
         android:id="@+id/edit_memo_save"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_gravity="center"
+        android:backgroundTint="@color/first_tap_color"
         android:text="save"/>
 
 </LinearLayout>
