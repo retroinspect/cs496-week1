@@ -11,7 +11,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -19,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.sample.R
 import jp.wasabeef.blurry.Blurry
+import java.io.File
 
 class DashboardFragment : Fragment() {
 
@@ -70,6 +74,17 @@ class DashboardFragment : Fragment() {
             }
         })
 
+        //camera
+        val cameraButton : ImageButton = root.findViewById(R.id.camera_button)
+        val TAG = "태그명"
+        val TAKE_PICTURE = 1
+        val REQUEST_TAKE_PHOTO = 1
+
+        cameraButton.setOnClickListener {
+            val cameraIntent = Intent(context, PhotoActivity::class.java)
+            startActivityForResult(cameraIntent, 10002)
+        }
+
         dashboardViewModel.allImages.observe(
             viewLifecycleOwner
         ) {
@@ -86,6 +101,9 @@ class DashboardFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
+            onCreateView(initInflater, initContainer, initSavedInstanceState)
+        }
+        if ((requestCode == 10002) && (resultCode == Activity.RESULT_OK)) {
             onCreateView(initInflater, initContainer, initSavedInstanceState)
         }
     }

@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -30,6 +33,19 @@
         <activity android:name=".ui.notes.ClickMemoActivity"
             android:theme="@style/AppTheme.SubActivity"/>
         <activity android:name=".ui.notes.LongClickPopupActivity"/>
+        <activity android:name=".ui.dashboard.PhotoActivity"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.sample"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
+
 
 </manifest>

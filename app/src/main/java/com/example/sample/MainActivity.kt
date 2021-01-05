@@ -21,7 +21,8 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.READ_CONTACTS,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_CONTACTS)
+        Manifest.permission.WRITE_CONTACTS,
+        Manifest.permission.CAMERA)
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
