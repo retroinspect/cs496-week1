@@ -1,10 +1,13 @@
 package com.example.sample.ui.dashboard
 
 import android.app.Activity
+import android.content.ContentUris
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +25,9 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardViewModel: DashboardViewModel
     lateinit var layoutManager : StaggeredGridLayoutManager
     lateinit var images: RecyclerView
+    lateinit var initInflater : LayoutInflater
+    var initContainer : ViewGroup? = null
+    var initSavedInstanceState : Bundle? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +39,13 @@ class DashboardFragment : Fragment() {
 
         //actionBar
 
+        initInflater = inflater
+        if (container != null) {
+            initContainer = container
+        }
+        if (savedInstanceState != null) {
+            initSavedInstanceState = savedInstanceState
+        }
 
         val root: View = inflater.inflate(R.layout.fragment_dashboard, container, false)
         images = root.findViewById(R.id.image_list)
@@ -73,20 +86,7 @@ class DashboardFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
-            val adapter = ImageAdapter()
-            adapter.data = dashboardViewModel.getAllImages()
-            adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
-                val itemClickIntent = Intent(context, ClickImageActivity::class.java)
-
-                override fun onClick(view: View, position: Int) {
-                    itemClickIntent.putExtra("image_uri", adapter.data[position].uri.toString())
-                    itemClickIntent.putExtra("image_title", adapter.data[position].title)
-                    startActivityForResult(itemClickIntent, 10001)
-                }
-            })
-            images.adapter = adapter
-            images.setHasFixedSize(true)
-            images.layoutManager = layoutManager
+            onCreateView(initInflater, initContainer, initSavedInstanceState)
         }
     }
 }

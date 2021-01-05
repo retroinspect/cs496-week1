@@ -27,12 +27,24 @@ class HomeFragment : Fragment() {
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var root : View
     lateinit var phones : RecyclerView
+    lateinit var initInflater : LayoutInflater
+    var initContainer : ViewGroup? = null
+    var initSavedInstanceState : Bundle? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        initInflater = inflater
+        if (container != null) {
+            initContainer = container
+        }
+        if (savedInstanceState != null) {
+            initSavedInstanceState = savedInstanceState
+        }
+
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
         root = inflater.inflate(R.layout.fragment_home, container, false)
@@ -76,10 +88,7 @@ class HomeFragment : Fragment() {
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
-            val adapter = PhoneAdapter()
-            adapter.data = homeViewModel.getPhoneNumbers(sortText, searchText)
-            phones.adapter = adapter
-            phones.layoutManager = LinearLayoutManager(context)
+            onCreateView(initInflater, initContainer, initSavedInstanceState)
         }
     }
 }

@@ -65,16 +65,16 @@ class NoteFragment : Fragment() {
         binding.createMemoButton.setOnClickListener {
             toggleFab()
             val newMemoId : String = noteManager.insert(false)
-            val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
-            oneTodoIntent.putExtra("todo_id", newMemoId)
-            context?.startActivity(oneTodoIntent)
+            val oneMemoIntent = Intent(context, ClickMemoActivity::class.java)
+            oneMemoIntent.putExtra("memo_id", newMemoId)
+            context?.startActivity(oneMemoIntent)
         }
         binding.createTodoListButton.setOnClickListener {
             toggleFab()
             val newTodoId : String = noteManager.insert(true)
-            val oneMemoIntent = Intent(context, ClickMemoActivity::class.java)
-            oneMemoIntent.putExtra("memo_id", newTodoId)
-            context?.startActivity(oneMemoIntent)
+            val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
+            oneTodoIntent.putExtra("todo_id", newTodoId)
+            context?.startActivity(oneTodoIntent)
         }
         return binding.root
     }
