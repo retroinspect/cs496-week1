@@ -5,22 +5,18 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.sample.database.NoteRealmManager
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
-import io.realm.Realm
 import java.util.*
 
 class TodoViewModel(
+    val database: TodoRealmManager,
     application: Application
 ) : AndroidViewModel(application) {
 
     private var focusedTodo = MutableLiveData<Todo>()
-    val realm: Realm = Realm.getDefaultInstance()
-    val noteManager = NoteRealmManager(realm)
-    val noteId = noteManager.insert(false)
-    val database = TodoRealmManager(realm, noteId)
-
 
     init {
         focusedTodo.value = database.getFocusedTodo()
@@ -68,3 +64,17 @@ class TodoViewModel(
         database.toggleCheck(todoId)
     }
 }
+
+class TodoViewModelFactory(
+    private val todoRealmManager: TodoRealmManager,
+    private val application: Application
+) : ViewModelProvider.Factory {
+    @Suppress("unchecked_cast")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
+            return TodoViewModel(todoRealmManager, application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
+

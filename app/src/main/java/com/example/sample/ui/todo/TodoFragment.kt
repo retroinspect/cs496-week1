@@ -17,18 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sample.R
 import com.example.sample.Util
 import com.example.sample.database.Todo
+import com.example.sample.database.TodoRealmManager
 import com.example.sample.databinding.FragmentTodosBinding
 import io.realm.Realm
 import timber.log.Timber
+import java.lang.Exception
 import java.util.*
 
 class TodoFragment : Fragment() {
     private lateinit var binding: FragmentTodosBinding
     private lateinit var viewModel: TodoViewModel
     val realm: Realm = Realm.getDefaultInstance()
-
-    //    val noteManager = NoteRealmManager(realm)
-    //    val noteId = noteManager.insert(false)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +37,16 @@ class TodoFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val application = requireNotNull(this.activity).application
+        arguments ?: Timber.i("No arguments passed!")
+        val noteId = requireArguments().getString("noteId")
+            ?: throw Exception("Arguments should not be null")
 
-        val viewModelFactory = TodoViewModelFactory(application)
+        Timber.i(noteId)
+
+        val realm: Realm = Realm.getDefaultInstance()
+        val todoManager = TodoRealmManager(realm, noteId)
+
+        val viewModelFactory = TodoViewModelFactory(todoManager, application)
         viewModel = ViewModelProvider(
             this, viewModelFactory
         ).get(TodoViewModel::class.java)
@@ -49,46 +56,53 @@ class TodoFragment : Fragment() {
         binding.lifecycleOwner = this
 
         val adapter =
-            viewModel.database.getAllTodos()?.let {
+            todoManager.getAllTodos()?.let {
                 TodoAdapter(
                     TodoActions(viewModel, context),
                     it
                 )
             }
 
-        if (adapter == null)
-            Timber.i("Invalid note id")
-
         binding.todoList.adapter = adapter
 
         binding.titleTodo.setOnClickListener {
+            Timber.i("titleTodo click listener")
             binding.editTitleTodo.visibility = VISIBLE
             binding.titleTodo.visibility = GONE
+            binding.editTitleTodo.requestFocus()
         }
 
-        val title = viewModel.database.getTitle()
-        if (title != null) {
+        val title = todoManager.getTitle()
+        Timber.i("title: $title")
+        if (title != null && title.isNotEmpty()) {
+            Timber.i("non-empty title: $title)")
             binding.titleTodo.text = title
             binding.editTitleTodo.setText(title)
+            binding.editTitleTodo.visibility = GONE
+            binding.titleTodo.visibility = VISIBLE
         } else {
-            binding.titleTodo.text = ""
+            Timber.i("empty title")
             binding.editTitleTodo.visibility = VISIBLE
             binding.titleTodo.visibility = GONE
+            binding.editTitleTodo.requestFocus()
         }
+
         binding.editTitleTodo.setOnKeyListener { _: View, keyCode: Int, event: KeyEvent ->
             val input = binding.editTitleTodo.text.toString()
+            Timber.i("editTitleTodo text: $input")
             if (Util.isEnterPressedDown(keyCode, event)) {
+                Timber.i("editTodo Enter")
                 viewModel.updateTitle(input)
                 binding.titleTodo.text = input
-                binding.editTitleTodo.clearFocus()
                 binding.editTitleTodo.visibility = GONE
                 binding.titleTodo.visibility = VISIBLE
+                todoManager.updateTitle(input)
+                binding.editTitleTodo.clearFocus()
                 Util.hideKeyboard(context, binding.root)
                 return@setOnKeyListener true
             }
             return@setOnKeyListener false
         }
-
 
         val layoutManager = LinearLayoutManager(context)
         binding.todoList.layoutManager = layoutManager

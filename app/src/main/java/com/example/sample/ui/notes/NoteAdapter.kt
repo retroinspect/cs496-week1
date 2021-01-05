@@ -41,6 +41,7 @@ class NoteAdapter(
                 if (note?.isTodo == true) {
                     //TodoActivity
                     val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
+
                     oneTodoIntent.putExtra("todo_id", item.id)
                     context?.startActivity(oneTodoIntent)
                 }
