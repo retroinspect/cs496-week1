@@ -15,7 +15,6 @@
             android:layout_height="@dimen/preview_size"
             android:gravity="center"
             android:textColorHighlight="@color/purple_700"
-
             android:textColorLink="@color/purple_500"
             android:textSize="@dimen/small_font"
             app:buttonTint="@color/purple_200"

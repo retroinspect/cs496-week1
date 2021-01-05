@@ -129,31 +129,41 @@ class ClickTodoActivity : AppCompatActivity() {
                 }
             binding.todoList.adapter = adapter
 
+            //visibility
+            binding.titleTodo.visibility = GONE
+            binding.editTitleTodo.visibility = VISIBLE
+
             val title = dataSource.getTitle()
             if (title != null && title.isNotEmpty()) {
-                binding.titleTodo.text = title
+                Log.i("todoTest", "defalut setting (!null)")
+                binding.titleTodo.visibility = GONE
                 binding.editTitleTodo.setText(title)
+                binding.editTitleTodo.requestFocus()
             }
             else {
-                binding.titleTodo.visibility = GONE
-                binding.editTitleTodo.visibility = VISIBLE
+                Log.i("todoTest", "defalut setting (null)")
+                binding.titleTodo.setVisibility(GONE)
                 binding.editTitleTodo.requestFocus()
             }
 
             binding.titleTodo.setOnClickListener {
-                binding.editTitleTodo.visibility = VISIBLE
+                Log.i("todoTest", "titleTodo click listener")
                 binding.titleTodo.visibility = GONE
                 binding.editTitleTodo.requestFocus()
             }
 
+
+
             binding.editTitleTodo.setOnKeyListener { _: View, keyCode: Int, event: KeyEvent ->
                 val input = binding.editTitleTodo.text.toString()
+                Log.i("todoTest", "editTodo click listener")
                 if (Util.isEnterPressedDown(keyCode, event)) {
+                    Log.i("todoTest", "editTodo Enter")
+                    binding.editTitleTodo.visibility = GONE
+                    binding.titleTodo.visibility = VISIBLE
                     viewModel.updateTitle(input)
                     binding.titleTodo.text = input
                     binding.editTitleTodo.clearFocus()
-                    binding.editTitleTodo.visibility = GONE
-                    binding.titleTodo.visibility = VISIBLE
                     Util.hideKeyboard(baseContext, binding.root)
                     return@setOnKeyListener true
                 }

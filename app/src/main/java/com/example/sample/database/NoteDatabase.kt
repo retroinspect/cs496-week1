@@ -45,9 +45,13 @@ class NoteRealmManager(val realm: Realm) {
     /// insert an empty note
     fun insert(isTodo: Boolean): String {
         realm.beginTransaction()
-        val primaryKey = UUID.randomUUID().toString()
+        val primaryKey = getPrimaryKey()
         val note = realm.createObject<Note>(primaryKey)
         note.isTodo = isTodo
+        if (isTodo) {
+            val data = realm.createObject<Todo>(getPrimaryKey())
+            note.todos.add(data)
+        }
         realm.commitTransaction()
         return primaryKey
     }
@@ -82,6 +86,9 @@ class NoteRealmManager(val realm: Realm) {
         realm.deleteAll()
         realm.commitTransaction()
     }
+
+    private fun getPrimaryKey(): String = UUID.randomUUID().toString()
+
 }
 
 class TodoRealmManager(val realm: Realm, noteId: String) {
