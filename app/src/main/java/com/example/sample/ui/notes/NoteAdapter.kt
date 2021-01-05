@@ -46,8 +46,21 @@ class NoteAdapter(
             context: Context?
         ) {
             itemView.setOnClickListener {
-                Timber.i(item.id)
-                // TODO 노트 종류에 따라 적절한 Activity로 이동하도록 하기
+                val note = noteActions.get(item.id)
+                val context = noteActions.getContext()
+                if (note?.isTodo == true) {
+                    //TodoActivity
+                    val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
+
+                    oneTodoIntent.putExtra("todo_id", item.id)
+                    context?.startActivity(oneTodoIntent)
+                }
+                else if (note?.isTodo == false) {
+                    //MemoActivity
+                    val oneMemoIntent = Intent(context, ClickMemoActivity::class.java)
+                    oneMemoIntent.putExtra("memo_id", item.id)
+                    context?.startActivity(oneMemoIntent)
+                }
             }
 
             itemView.setOnLongClickListener {

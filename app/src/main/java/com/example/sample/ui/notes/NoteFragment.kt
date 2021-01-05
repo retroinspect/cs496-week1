@@ -1,5 +1,6 @@
 package com.example.sample.ui.notes
 
+import android.content.Context
 import android.os.Bundle
 import android.content.Intent
 import android.view.LayoutInflater
@@ -32,7 +33,7 @@ class NoteFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notes, container, false)
 
         val model: RealmResults<Note> = noteManager.getAllNotes()
-        val adapter = NoteAdapter(context, NoteActions(), model)
+        val adapter = NoteAdapter(context, NoteActions(noteManager, context), model)
 
         binding.noteList.adapter = adapter
         val layoutManager = StaggeredGridLayoutManager(2, 1)
@@ -88,6 +89,14 @@ class NoteFragment : Fragment() {
     }
 }
 
-class NoteActions() {
+class NoteActions(val noteRealmManager: NoteRealmManager, context : Context?) {
+    val sendContext : Context? = context
 
+    fun get(id: String): Note? {
+        return noteRealmManager.get(id)
+    }
+
+    fun getContext() : Context? {
+        return sendContext
+    }
 }
