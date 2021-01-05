@@ -39,30 +39,6 @@ class TodoViewModel(
         focusedTodo.value = null
     }
 
-    fun insert() {
-        database.insert()
-    }
-
-    fun update(input: String?, id: String) {
-        if (input != null) {
-            database.update(id, input)
-        }
-    }
-
-    fun updateTitle(input: String?) {
-        if (input != null) {
-            database.updateTitle(input)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun onClickDelete(todoId: String) {
-        database.delete(todoId)
-    }
-
-    fun toggleCheck(todoId: String) {
-        database.toggleCheck(todoId)
-    }
 }
 
 class TodoViewModelFactory(

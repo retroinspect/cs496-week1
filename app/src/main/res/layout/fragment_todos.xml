@@ -65,7 +65,6 @@
                 android:layout_marginTop="4dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/clear_button"
-                android:onClick="@{() -> todoViewModel.onClear()}"
                 android:src="@android:drawable/ic_menu_delete" />
         </LinearLayout>
 

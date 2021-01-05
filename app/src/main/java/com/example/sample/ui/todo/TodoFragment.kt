@@ -20,6 +20,7 @@ import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
 import com.example.sample.databinding.FragmentTodosBinding
 import io.realm.Realm
+import io.realm.RealmList
 import timber.log.Timber
 import java.lang.Exception
 import java.util.*
@@ -51,17 +52,15 @@ class TodoFragment : Fragment() {
             this, viewModelFactory
         ).get(TodoViewModel::class.java)
 
+        val todoActions = TodoActions(viewModel, context, todoManager)
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_todos, container, false)
         binding.todoViewModel = viewModel
         binding.lifecycleOwner = this
 
+        val data = todoActions.getAllTodos()
         val adapter =
-            todoManager.getAllTodos()?.let {
-                TodoAdapter(
-                    TodoActions(viewModel, context),
-                    it
-                )
-            }
+            TodoAdapter(todoActions, data)
 
         binding.todoList.adapter = adapter
 
@@ -92,7 +91,7 @@ class TodoFragment : Fragment() {
             Timber.i("editTitleTodo text: $input")
             if (Util.isEnterPressedDown(keyCode, event)) {
                 Timber.i("editTodo Enter")
-                viewModel.updateTitle(input)
+                todoActions.updateTitle(input)
                 binding.titleTodo.text = input
                 binding.editTitleTodo.visibility = GONE
                 binding.titleTodo.visibility = VISIBLE
@@ -117,20 +116,24 @@ class TodoFragment : Fragment() {
 }
 
 class TodoActions(
-    val viewModel: TodoViewModel,
-    val context: Context?
+    private val viewModel: TodoViewModel,
+    val context: Context?,
+    private val todoManager: TodoRealmManager
 ) {
     @RequiresApi(Build.VERSION_CODES.N)
-    val onClickDelete = TodoListener { todoId ->
-        viewModel.onClickDelete(todoId)
+    fun deleteTodo(todo: Todo) = todoManager.delete(todo.todoId)
+
+    fun toggleCheckTodo(todo: Todo) {
+        todoManager.toggleCheck(todo.todoId)
     }
 
-    val toggleCheckTodo = TodoListener { todoId ->
-        viewModel.toggleCheck(todoId)
+    fun update(id: String, input: String) {
+        todoManager.update(id, input)
     }
 
-    val updateTodo = { todoId: String, input: String -> viewModel.update(input, todoId) }
-    val insertTodo = { viewModel.insert() }
+    fun insert() {
+        todoManager.insert()
+    }
 
     val hasFocus = { todo: Todo -> viewModel.hasFocus(todo) }
     val getFocus = { todo: Todo -> viewModel.getFocus(todo) }
@@ -138,6 +141,10 @@ class TodoActions(
         viewModel.setFocus(createdAt)
     }
 
-//    val updateTitle = { input: String -> viewModel.updateTitle(input) }
+    fun updateTitle(input: String) = todoManager.updateTitle(input)
+
+    fun getAllTodos(): RealmList<Todo> {
+        return todoManager.getAllTodos()
+    }
 
 }

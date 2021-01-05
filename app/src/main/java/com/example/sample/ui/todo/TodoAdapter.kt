@@ -1,11 +1,13 @@
 package com.example.sample.ui.todo
 
+import android.os.Build
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.Util
 import com.example.sample.database.Todo
@@ -26,6 +28,7 @@ class TodoAdapter(
         return ViewHolder(binding)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
         Timber.i("ViewHolder of ${item?.todoId} created")
@@ -35,6 +38,7 @@ class TodoAdapter(
     }
 
     class ViewHolder(val binding: ListItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
+        @RequiresApi(Build.VERSION_CODES.N)
         fun bind(
             item: Todo,
             todoActions: TodoActions
@@ -51,8 +55,8 @@ class TodoAdapter(
             binding.editTextTodo.setOnKeyListener { v: View, keyCode: Int, event: KeyEvent ->
                 val input = binding.editTextTodo.text.toString()
                 if (Util.isEnterPressedDown(keyCode, event)) {
-                    todoActions.updateTodo(item.todoId, input)
-                    todoActions.insertTodo()
+                    todoActions.update(item.todoId, input)
+//                    todoActions.insertTodo()
                     todoActions.setFocus(item.createdAt)
                     binding.textTodo.text = input
                     binding.editTextTodo.clearFocus()
@@ -74,12 +78,12 @@ class TodoAdapter(
                 }
             }
 
-            binding.clickListener = todoActions.onClickDelete
+            binding.deleteButton.setOnClickListener{
+                todoActions.deleteTodo(item)
+            }
             binding.checkboxTodo.isChecked = item.isCompleted
             binding.checkboxTodo.setOnClickListener {
-                todoActions.toggleCheckTodo.onClick(
-                    item
-                )
+                todoActions.toggleCheckTodo(item)
             }
 
             binding.executePendingBindings()
