@@ -10,7 +10,7 @@ class MyApplication : Application(){
         super.onCreate()
         Realm.init(this)
         val config = RealmConfiguration.Builder()
-            .name("notes")
+            .name("noteManager")
             .build()
         Realm.setDefaultConfiguration(config)
         Timber.plant(Timber.DebugTree())

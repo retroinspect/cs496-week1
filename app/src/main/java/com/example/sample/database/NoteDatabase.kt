@@ -34,10 +34,53 @@ open class Todo : RealmObject() {
     var text: String = ""
     var isCompleted: Boolean = false
     var createdAt: Date = Date()
+}
 
-// inverse relation
-//    @LinkingObjects("note")
-//    val note: RealmResults<Note>? = null
+class MemoRealmManager(val realm: Realm, val noteId: String) {
+    private val curNote: Note? = realm.where<Note>().equalTo("id", noteId).findFirst()
+
+    fun getTitle(): String {
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
+        return curNote.title
+    }
+
+    fun getDesc(): String {
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+        val memo = curNote.memo
+        return if (memo == null) {
+            realm.beginTransaction()
+            curNote.memo = realm.createObject()
+            realm.commitTransaction()
+            ""
+        } else
+            memo.desc
+    }
+
+    fun updateTitle(input: String) {
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+        realm.beginTransaction()
+        curNote.title = input
+        realm.commitTransaction()
+    }
+
+    fun updateDesc(input: String) {
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
+        val memo = curNote.memo
+        realm.beginTransaction()
+        if (memo == null) {
+            curNote.memo = realm.createObject()
+            curNote.memo!!.desc = input
+        } else
+            memo.desc = input
+        
+        realm.commitTransaction()
+    }
 }
 
 
@@ -90,6 +133,7 @@ class NoteRealmManager(val realm: Realm) {
     private fun getPrimaryKey(): String = UUID.randomUUID().toString()
 
 }
+
 
 class TodoRealmManager(val realm: Realm, noteId: String) {
 
