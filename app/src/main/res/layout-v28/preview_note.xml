@@ -6,41 +6,32 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/card_preview_memo"
-        app:contentPadding="10dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-
+        android:outlineAmbientShadowColor="#bbb"
         app:cardCornerRadius="16dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            >
+            android:padding="@dimen/medium_size">
 
             <TextView
-                android:id="@+id/title_preview_memo"
+                android:id="@+id/title_preview_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
-                android:text="@string/desc_preview_memo"
                 android:textSize="@dimen/small_font"
-                android:visibility="visible"
-                tools:text="@string/title_preview_memo" />
+                tools:text="@string/title_preview_note" />
 
             <TextView
-                android:id="@+id/desc_preview_memo"
+                android:id="@+id/desc_preview_note"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
                 android:gravity="start"
-                android:text="@string/desc_preview_memo"
-                android:textColor="@color/purple_700"
                 android:textSize="@dimen/preview_font"
-                android:visibility="visible"
-                tools:text="@string/desc_preview_memo" />
+                tools:text="@string/desc_preview_note" />
 
         </LinearLayout>
 

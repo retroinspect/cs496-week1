@@ -34,14 +34,17 @@ class NoteFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notes, container, false)
 
         val model: RealmResults<Note> = noteManager.getAllNotes()
-        val adapter = NoteAdapter(NoteActions(), model)
+        val adapter = NoteAdapter(context, NoteActions(), model)
 
         binding.noteList.adapter = adapter
 
         val layoutManager = StaggeredGridLayoutManager(2, 1)
         binding.noteList.layoutManager = layoutManager
-        binding.createNoteButton.setOnClickListener {
+        binding.createMemoButton.setOnClickListener {
             noteManager.insert(false)
+        }
+        binding.createTodoListButton.setOnClickListener {
+            noteManager.insert(true)
         }
         binding.clearNoteButton.setOnClickListener {
             noteManager.clear()
