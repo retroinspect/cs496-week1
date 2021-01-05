@@ -43,6 +43,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
+                android:focusableInTouchMode="true"
                 android:autofillHints=""
                 android:background="@android:color/transparent"
                 android:gravity="start"

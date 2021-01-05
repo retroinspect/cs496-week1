@@ -16,7 +16,7 @@ class ImageAdapter: RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
         fun bind(item: ImageModel) {
             imageItem.setImageURI(item.uri)
-            imageTitleView.setText(item.title)
+            imageTitleView.text = item.title
         }
 
         companion object {

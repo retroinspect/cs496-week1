@@ -18,9 +18,9 @@ class CreateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_phone_number)
 
-        var createButtonName = findViewById(R.id.create_phone_name) as EditText
-        var createButtonNumber = findViewById(R.id.create_phone_number) as EditText
-        var createPhoneButton = findViewById(R.id.create_phone_submit) as Button
+        var createButtonName = findViewById<EditText>(R.id.create_phone_name)
+        var createButtonNumber = findViewById<EditText>(R.id.create_phone_number)
+        var createPhoneButton = findViewById<Button>(R.id.create_phone_submit)
 
         createPhoneButton.setOnClickListener {
             var name: String = createButtonName.text.toString()
@@ -43,7 +43,7 @@ class CreateActivity : AppCompatActivity() {
                     .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber).withValue(ContactsContract.CommonDataKinds.Phone.LABEL, "LABEL?")
                     .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
             ops.add(op.build())
-            this.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops)
+            this.contentResolver.applyBatch(ContactsContract.AUTHORITY, ops)
             Toast.makeText(this, "저장되었습니다", Toast.LENGTH_LONG).show()
             setResult(Activity.RESULT_OK)
             finish()

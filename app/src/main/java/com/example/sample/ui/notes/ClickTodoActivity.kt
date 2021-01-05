@@ -15,14 +15,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.example.sample.Util
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
-import com.example.sample.databinding.DetailTodoListBinding
 import io.realm.Realm
 import io.realm.RealmList
 import kotlinx.android.synthetic.main.activity_main.*
@@ -134,7 +132,7 @@ class ClickTodoActivity : AppCompatActivity() {
                 // kakaotalk 미설치 에러
                 val kakaoAlertBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
                 kakaoAlertBuilder.setTitle("공유할 수 없음")
-                kakaoAlertBuilder.setMessage("이 디바이스에 Kakao Talk이 설치되어있지 않습니다.\n설치하시겠습니까?")
+                kakaoAlertBuilder.setMessage("이 디바이스에 Kakao Talk 이 설치되어있지 않습니다.\n설치하시겠습니까?")
                 kakaoAlertBuilder.setPositiveButton(
                     "예"
                 ) { _, _ ->
@@ -184,6 +182,7 @@ class TodoActions(
 ) {
     fun getTitle(): String? = todoManager.getTitle()
     var focusedTodo: Todo? = null
+    var focusedView: View? = null
 
     fun getAllTodos(): RealmList<Todo> {
         return todoManager.getAllTodos()
@@ -194,17 +193,21 @@ class TodoActions(
     @RequiresApi(Build.VERSION_CODES.N)
     fun deleteTodo(todo: Todo) = todoManager.delete(todo.todoId)
 
-    fun setFocus(createdAt: Date) {
-        focusedTodo = todoManager.getFocusedTodo(createdAt)
+    fun setFocusToNextTodo(todo: Todo) {
+        focusedTodo = todoManager.getFocusedTodo(todo.createdAt)
     }
 
     fun hasFocus(todo: Todo): Boolean {
         return (todo.todoId == focusedTodo?.todoId)
     }
 
-    fun getFocus(todo: Todo) {
+    fun setFocusToCurrentTodo(todo: Todo, view: View? = null) {
+        focusedView?.clearFocus()
         focusedTodo = todo
+        focusedView = view
     }
+
+
 
     fun clearAll() {
         todoManager.clear()
@@ -225,5 +228,9 @@ class TodoActions(
 
     fun hideKeyboard(view: View) {
         Util.hideKeyboard(context, view)
+    }
+
+    fun showKeyboard(view: View) {
+        Util.showKeyboard(context, view)
     }
 }

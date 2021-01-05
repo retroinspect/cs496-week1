@@ -24,7 +24,7 @@ class TodoAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = ListItemTodoBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, todoActions)
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -32,70 +32,89 @@ class TodoAdapter(
         val item = getItem(position)
         Timber.i("ViewHolder of ${item?.todoId} created")
         if (item != null) {
-            holder.bind(item, todoActions)
+            holder.bind(item)
         }
     }
 
-    class ViewHolder(private val binding: ListItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
-        @RequiresApi(Build.VERSION_CODES.N)
-        fun bind(
-            item: Todo,
-            todoActions: TodoActions
-        ) {
-            binding.textTodo.text = item.text
-            Timber.i(item.text)
-            binding.editTextTodo.setText(item.text)
+    class ViewHolder(private val binding: ListItemTodoBinding, private val todoActions: TodoActions) :
+        RecyclerView.ViewHolder(binding.root) {
+        private fun handleFocus(item: Todo) {
+            Timber.i("${item.todoId} has focus")
+//            todoActions.showKeyboard(binding.editTextTodo)
+            binding.deleteButton.visibility = VISIBLE
+            binding.editTextTodo.visibility = VISIBLE
+            binding.textTodo.visibility = GONE
+        }
 
+        private fun handleClearedFocus() {
+            binding.deleteButton.visibility = INVISIBLE
             binding.editTextTodo.visibility = GONE
             binding.textTodo.visibility = VISIBLE
+        }
 
+        private fun setCheckbox(item: Todo) {
+            binding.checkboxTodo.isChecked = item.isCompleted
+            binding.checkboxTodo.setOnClickListener {
+                todoActions.toggleCheckTodo(item)
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        private fun setDeleteButton(item: Todo) {
             binding.deleteButton.setOnClickListener {
                 todoActions.deleteTodo(item)
             }
+        }
+
+        private fun initializeText(item: Todo) {
+            binding.textTodo.text = item.text
+            binding.editTextTodo.setText(item.text)
+        }
+
+        private fun handleSubmit(item: Todo) {
+            val input = binding.editTextTodo.text.toString()
+            todoActions.update(item.todoId, input)
+            Timber.i("Pressed enter: $input")
+            binding.textTodo.text = input
+            binding.editTextTodo.clearFocus()
+//            todoActions.hideKeyboard(binding.textTodoWrapper)
+            todoActions.setFocusToNextTodo(item)
+        }
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        fun bind(
+            item: Todo
+        ) {
+            initializeText(item)
+
+            binding.editTextTodo.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) handleFocus(item)
+                else handleClearedFocus()
+            }
 
             binding.textTodoWrapper.setOnClickListener {
-
-                binding.editTextTodo.visibility = VISIBLE
-                binding.textTodo.visibility = GONE
-                todoActions.getFocus(item)
+                binding.editTextTodo.showSoftInputOnFocus = true
+                todoActions.setFocusToCurrentTodo(item, binding.editTextTodo)
+                binding.editTextTodo.requestFocus()
+//                todoActions.showKeyboard(binding.editTextTodo)
+                Timber.i("should focus on ${item.todoId}")
             }
 
             binding.editTextTodo.setOnKeyListener { _: View, keyCode: Int, event: KeyEvent ->
-                val input = binding.editTextTodo.text.toString()
-                Timber.i(input)
                 if (Util.isEnterPressedDown(keyCode, event)) {
-                    todoActions.update(item.todoId, input)
-                    Timber.i("Pressed enter: $input")
-                    todoActions.insert()
-                    todoActions.setFocus(item.createdAt)
-                    binding.textTodo.text = input
-                    binding.editTextTodo.clearFocus()
-                    binding.editTextTodo.visibility = GONE
-                    binding.textTodo.visibility = VISIBLE
-                    todoActions.hideKeyboard(binding.textTodoWrapper)
+                    handleSubmit(item)
                     return@setOnKeyListener true
                 }
                 return@setOnKeyListener false
             }
 
             if (todoActions.hasFocus(item)) {
+                todoActions.setFocusToCurrentTodo(item, binding.editTextTodo)
                 binding.editTextTodo.requestFocus()
             }
 
-            binding.editTextTodo.setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    Timber.i("${item.todoId} has focus")
-                    binding.deleteButton.visibility = VISIBLE
-                } else {
-                    binding.deleteButton.visibility = INVISIBLE
-                }
-            }
-
-            binding.checkboxTodo.isChecked = item.isCompleted
-            binding.checkboxTodo.setOnClickListener {
-                todoActions.toggleCheckTodo(item)
-            }
-
+            setCheckbox(item)
+            setDeleteButton(item)
             binding.executePendingBindings()
         }
     }

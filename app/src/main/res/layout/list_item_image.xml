@@ -25,14 +25,14 @@
             android:id="@+id/image_title"
             android:layout_width="130dp"
             android:layout_height="30dp"
+            android:layout_marginTop="100dp"
             android:fontFamily="sans-serif"
+            android:foreground="@drawable/rectangle"
             android:gravity="center|center"
             android:text="홍길동"
             android:textColor="#ffffff"
-            android:foreground="@drawable/rectangle"
-            android:layout_marginTop="100dp"
             android:textSize="15sp"
-            tools:srcCompat="@drawable/ic_home_black_24dp" />
+            tools:srcCompat="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>
