@@ -20,6 +20,7 @@ import jp.wasabeef.blurry.Blurry
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
+    lateinit var layoutManager : StaggeredGridLayoutManager
     lateinit var images: RecyclerView
 
     override fun onCreateView(
@@ -37,7 +38,7 @@ class DashboardFragment : Fragment() {
         images = root.findViewById(R.id.image_list)
         val titleImageView: ImageView = root.findViewById(R.id.album_title_image)
         val adapter = ImageAdapter()
-        val layoutManager = StaggeredGridLayoutManager(3, 1)
+        layoutManager = StaggeredGridLayoutManager(3, 1)
 
         val totImages = dashboardViewModel.setImages()
         if (totImages.size > 0) {
@@ -46,7 +47,15 @@ class DashboardFragment : Fragment() {
             Blurry.with(context).radius(50).from(titleImage).into(titleImageView)
         }
 
-        setListener(adapter)
+        adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
+            val itemClickIntent = Intent(context, ClickImageActivity::class.java)
+
+            override fun onClick(view: View, position: Int) {
+                itemClickIntent.putExtra("image_uri", adapter.data[position].uri.toString())
+                itemClickIntent.putExtra("image_title", adapter.data[position].title)
+                startActivityForResult(itemClickIntent, 10001)
+            }
+        })
 
         dashboardViewModel.allImages.observe(
             viewLifecycleOwner
@@ -64,26 +73,20 @@ class DashboardFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
-            refreshFragment()
+            val adapter = ImageAdapter()
+            adapter.data = dashboardViewModel.getAllImages()
+            adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
+                val itemClickIntent = Intent(context, ClickImageActivity::class.java)
+
+                override fun onClick(view: View, position: Int) {
+                    itemClickIntent.putExtra("image_uri", adapter.data[position].uri.toString())
+                    itemClickIntent.putExtra("image_title", adapter.data[position].title)
+                    startActivityForResult(itemClickIntent, 10001)
+                }
+            })
+            images.adapter = adapter
+            images.setHasFixedSize(true)
+            images.layoutManager = layoutManager
         }
-    }
-
-    fun refreshFragment() {
-        val adapter = ImageAdapter()
-        adapter.data = dashboardViewModel.getAllImages()
-        setListener(adapter)
-        images.adapter = adapter
-    }
-
-    fun setListener(adapter: ImageAdapter) {
-        adapter.setItemClickListener(object : ImageAdapter.ItemClickListener {
-            val itemClickIntent = Intent(context, ClickImageActivity::class.java)
-
-            override fun onClick(view: View, position: Int) {
-                itemClickIntent.putExtra("image_uri", adapter.data[position].uri.toString())
-                itemClickIntent.putExtra("image_title", adapter.data[position].title)
-                startActivityForResult(itemClickIntent, 10001)
-            }
-        })
     }
 }

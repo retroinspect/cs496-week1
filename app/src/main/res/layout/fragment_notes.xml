@@ -13,7 +13,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp"
+        android:layout_margin="30dp"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
         android:background="@color/main_color">
@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="모든 노트"
+                android:text="Notes"
                 android:textSize="@dimen/note_title_font" />
 
         </LinearLayout>
@@ -35,7 +35,7 @@
             android:id="@+id/note_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="70dp"
             android:layout_marginBottom="50dp" />
 
         <RelativeLayout

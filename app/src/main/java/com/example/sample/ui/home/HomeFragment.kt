@@ -25,6 +25,7 @@ class HomeFragment : Fragment() {
     var sortText = "asc"
 
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var root : View
     lateinit var phones : RecyclerView
 
     override fun onCreateView(
@@ -34,7 +35,7 @@ class HomeFragment : Fragment() {
     ): View? {
         homeViewModel =
                 ViewModelProvider(this).get(HomeViewModel::class.java)
-        val root: View = inflater.inflate(R.layout.fragment_home, container, false)
+        root = inflater.inflate(R.layout.fragment_home, container, false)
 
         //setList()
         phones = root.findViewById(R.id.phone_list)
@@ -75,13 +76,10 @@ class HomeFragment : Fragment() {
     override fun onActivityResult(requestCode : Int, resultCode : Int, data : Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if ((requestCode == 10001) && (resultCode == Activity.RESULT_OK)) {
-            refreshFragment()
+            val adapter = PhoneAdapter()
+            adapter.data = homeViewModel.getPhoneNumbers(sortText, searchText)
+            phones.adapter = adapter
+            phones.layoutManager = LinearLayoutManager(context)
         }
-    }
-
-    fun refreshFragment() {
-        val adapter = PhoneAdapter()
-        adapter.data = homeViewModel.getPhoneNumbers(sortText, searchText)
-        phones.adapter = adapter
     }
 }
