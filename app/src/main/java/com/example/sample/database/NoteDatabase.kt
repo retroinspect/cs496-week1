@@ -9,6 +9,7 @@ import io.realm.RealmObject
 import io.realm.RealmResults
 import io.realm.annotations.PrimaryKey
 import io.realm.kotlin.createObject
+import io.realm.kotlin.isValid
 import io.realm.kotlin.where
 import timber.log.Timber
 import java.util.*
@@ -19,12 +20,12 @@ open class Note : RealmObject() {
     var title: String = ""
     var isTodo = false
     var createdAt: Date = Date()
-    var memo: Memo? = null
+    var memo: Memo? = Memo()
     var todos: RealmList<Todo> = RealmList()
 }
 
-open class Memo : RealmObject() {
-    var desc: String = ""
+open class Memo(desc: String = "") : RealmObject() {
+    var desc: String = desc
     var imgUri: String? = null
 }
 
@@ -67,7 +68,6 @@ class NoteRealmManager(val realm: Realm) {
     fun update(oldNote: Note, newNote: Note) {
         realm.beginTransaction()
         oldNote.title = newNote.title
-
         realm.commitTransaction()
     }
 
@@ -82,6 +82,33 @@ class NoteRealmManager(val realm: Realm) {
         realm.deleteAll()
         realm.commitTransaction()
     }
+}
+
+class MemoRealmManager(val realm: Realm, noteId: String) {
+    val curNote: Note? = realm.where<Note>().equalTo("id", noteId).findFirst()
+
+    fun update(title: String?, desc: String = "", imgUri: String? = null) {
+        if (curNote == null) {
+            curNoteIsNull()
+            return
+        }
+        realm.beginTransaction()
+        if (title != null)
+            curNote.title = title
+
+        val memo = curNote.memo
+
+        if (memo != null && memo.isValid)
+            curNote.memo!!.desc = desc
+        else {
+            Timber.i("creating memo")
+            curNote.memo = Memo(desc)
+        }
+        realm.commitTransaction()
+    }
+
+    private fun curNoteIsNull() = Timber.i("curNote is null: This should not happen")
+
 }
 
 class TodoRealmManager(val realm: Realm, noteId: String) {
@@ -100,7 +127,7 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
     }
 
     /// insert an empty todo
-    fun insert(): Todo? {
+    fun insert(input: String = "", isCompleted: Boolean = false): Todo? {
         if (curNote == null) {
             Timber.i("Invalid noteId")
             return null
@@ -109,6 +136,8 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
         Timber.i("add a todo")
         realm.beginTransaction()
         val data = realm.createObject<Todo>(getPrimaryKey())
+        data.text = input
+        data.isCompleted = isCompleted
         curNote.todos.add(data)
         realm.commitTransaction()
         return data

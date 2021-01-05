@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.example.sample.database.Note
+import com.example.sample.database.Todo
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
 import kotlinx.android.synthetic.main.preview_todo_item.view.*
@@ -60,26 +61,40 @@ class NoteAdapter(
             val title: TextView = itemView.findViewById(R.id.title_preview_note)
             val desc: TextView = itemView.findViewById(R.id.desc_preview_memo)
 
-            title.text = "메모 ${item.id} ${item.title}"
+            title.text = item.title
             desc.text = "${item.memo?.desc}"
+
+            if (title.text.isEmpty() && desc.text.isEmpty())
+                title.text = "빈 메모"
         }
 
         private fun setTodoPreview(itemView: View, item: Note, context: Context?) {
             val title: TextView = itemView.findViewById(R.id.title_preview_note)
             val todoListPreview: LinearLayout = itemView.findViewById(R.id.todo_list_preview_note)
 
-//            val todos: List<Todo> = item.todos
-//            val dummy: List<String> = listOf("안녕", "안녕2", "안녕3")
-//            for (i in dummy.indices) {
-//                val inflater = LayoutInflater.from(context)
-//                val todoItemPreview: LinearLayout =
-//                    inflater.inflate(R.layout.preview_todo_item, todoListPreview) as LinearLayout
-//                todoItemPreview.checkbox_todo.isChecked = true
-//                todoItemPreview.text_todo.text = dummy[i]
-//                todoItemPreview.addView(todoItemPreview)
-//            }
+            val todos: List<Todo> = item.todos
+            for (i in todos.indices) {
+                val inflater = LayoutInflater.from(context)
+                val todoItemPreview: LinearLayout =
+                    inflater.inflate(R.layout.preview_todo_item, null) as LinearLayout
 
-            title.text = "투두 ${item.id}"
+                if (todoItemPreview.parent != null) {
+                    ((todoItemPreview.parent) as ViewGroup).removeView(todoItemPreview)
+                }
+
+                if (todos[i].isCompleted)
+                    todoItemPreview.checkbox_todo.setImageResource(R.drawable.terms_check)
+                else todoItemPreview.checkbox_todo.setImageResource(R.drawable.terms_uncheck)
+
+                todoItemPreview.text_todo.text = todos[i].text
+                todoListPreview.addView(todoItemPreview)
+            }
+
+            title.text = item.title
+
+            if (title.text.isEmpty() && todos.isEmpty())
+                title.text = "빈 투두 리스트"
+
         }
     }
 }
