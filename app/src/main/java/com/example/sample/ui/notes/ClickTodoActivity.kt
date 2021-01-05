@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -29,24 +31,87 @@ import java.util.*
 
 class ClickTodoActivity : AppCompatActivity() {
     lateinit var mainIntent: Intent
-    lateinit var titleView: TextView
-    lateinit var contentsView: RecyclerView
     lateinit var todoManager: TodoRealmManager
     val realm = Realm.getDefaultInstance()
+    lateinit var todoActions: TodoActions
+
+    lateinit var root: ViewGroup
+    lateinit var clearTodoAll: ImageButton
+    lateinit var todoList: RecyclerView
+    lateinit var titleTodo: TextView
+    lateinit var editTitleTodo: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.detail_todo_list)
         mainIntent = intent
-
-        titleView = findViewById(R.id.title_todo)
-        contentsView = findViewById(R.id.todo_list)
+        setContentView(R.layout.detail_todo_list)
+        clearTodoAll = findViewById(R.id.clear_todo_all)
+        todoList = findViewById(R.id.todo_list)
+        titleTodo = findViewById(R.id.title_todo)
+        editTitleTodo = findViewById(R.id.edit_title_todo)
 
         val todoId: String? = mainIntent.getStringExtra("todo_id")
         if (todoId != null) {
             todoManager = TodoRealmManager(realm, todoId)
-            setView()
-        } else finish()
+//            setView()
+            todoActions = TodoActions(baseContext, todoManager)
+
+
+            clearTodoAll.setOnClickListener {
+                todoActions.clearAll()
+                Timber.i("Clear button clicked")
+            }
+
+
+            val todos = todoActions.getAllTodos()
+
+            if (todos.isEmpty())
+                throw Exception("Todos cannot empty")
+
+            val adapter = TodoAdapter(todoActions, todos)
+            todoList.adapter = adapter
+            val layoutManager = LinearLayoutManager(baseContext)
+            todoList.layoutManager = layoutManager
+
+
+            titleTodo.setOnClickListener {
+                Timber.i("titleTodo click listener")
+                titleTodo.visibility = GONE
+                editTitleTodo.visibility = VISIBLE
+                editTitleTodo.requestFocus()
+            }
+
+            editTitleTodo.setOnKeyListener { _: View, keyCode: Int, event: KeyEvent ->
+                val input = editTitleTodo.text.toString()
+                Timber.i("editTitleTodo text: $input")
+                if (Util.isEnterPressedDown(keyCode, event)) {
+                    Timber.i("editTodo Enter")
+                    editTitleTodo.visibility = GONE
+                    titleTodo.visibility = VISIBLE
+                    todoActions.updateTitle(input)
+                    titleTodo.text = input
+                    editTitleTodo.clearFocus()
+                    Util.hideKeyboard(baseContext, editTitleTodo as View)
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener false
+            }
+
+            val title = todoActions.getTitle()
+            if (title != null && title.isNotEmpty()) {
+                Timber.i("non-empty title: $title)")
+                titleTodo.visibility = VISIBLE
+                editTitleTodo.setText(title)
+            } else {
+                Timber.i("empty title")
+                titleTodo.visibility = GONE
+                editTitleTodo.requestFocus()
+            }
+
+        } else {
+            Timber.i("Todo id is null")
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -101,75 +166,10 @@ class ClickTodoActivity : AppCompatActivity() {
     }
 
     private fun getMessage(): String {
-        val resultMessage = "[" + titleView.text + "]\n"
-        // TODO contentsView 의 todos 를 string 으로 변환
+        val resultMessage = "[" + titleTodo.text + "]\n"
+        // TODO todoList 의 todos 를 string 으로 변환
         Timber.i("getMessage ${resultMessage}")
         return resultMessage
-    }
-
-    // TODO refactor each view setup (mount listeners, set adapter to recyclerView...)
-    private fun setClearButton(binding: DetailTodoListBinding) {
-    }
-
-    private fun setView() {
-        val todoActions = TodoActions(baseContext, todoManager)
-        val binding: DetailTodoListBinding =
-            DataBindingUtil.inflate(layoutInflater, R.layout.detail_todo_list, container, false)
-
-        binding.lifecycleOwner = this
-
-        val todos = todoActions.getAllTodos()
-
-        if (todos == null || todos.isEmpty())
-            throw Exception("Todos cannot empty")
-
-        val adapter = TodoAdapter(todoActions, todos)
-        binding.todoList.adapter = adapter
-
-        // visibility
-        binding.titleTodo.visibility = GONE
-        binding.editTitleTodo.visibility = VISIBLE
-
-        val title = todoActions.getTitle()
-        if (title != null && title.isNotEmpty()) {
-            Timber.i("default setting (!null)")
-            binding.titleTodo.visibility = GONE
-            binding.editTitleTodo.setText(title)
-            binding.editTitleTodo.requestFocus()
-        } else {
-            Timber.i("defalut setting (null)")
-            binding.titleTodo.visibility = GONE
-            binding.editTitleTodo.requestFocus()
-        }
-
-        binding.titleTodo.setOnClickListener {
-            Timber.i("titleTodo click listener")
-            binding.titleTodo.visibility = GONE
-            binding.editTitleTodo.requestFocus()
-        }
-
-        binding.editTitleTodo.setOnKeyListener { _: View, keyCode: Int, event: KeyEvent ->
-            val input = binding.editTitleTodo.text.toString()
-            Timber.i("editTodo click listener")
-            if (Util.isEnterPressedDown(keyCode, event)) {
-                Timber.i("editTodo Enter")
-                binding.editTitleTodo.visibility = GONE
-                binding.titleTodo.visibility = VISIBLE
-                todoActions.updateTitle(input)
-                binding.titleTodo.text = input
-                binding.editTitleTodo.clearFocus()
-                Util.hideKeyboard(baseContext, binding.root)
-                return@setOnKeyListener true
-            }
-            return@setOnKeyListener false
-        }
-
-        val layoutManager = LinearLayoutManager(baseContext)
-        binding.todoList.layoutManager = layoutManager
-
-        binding.clearTodoAll.setOnClickListener {
-            todoActions.clearAll()
-        }
     }
 
     override fun onDestroy() {
@@ -185,7 +185,7 @@ class TodoActions(
     fun getTitle(): String? = todoManager.getTitle()
     var focusedTodo: Todo? = null
 
-    fun getAllTodos(): RealmList<Todo>? {
+    fun getAllTodos(): RealmList<Todo> {
         return todoManager.getAllTodos()
     }
 
@@ -215,13 +215,15 @@ class TodoActions(
         todoManager.insert()
     }
 
-    fun update(input: String?, id: String) {
-        if (input != null) {
-            todoManager.update(id, input)
-        }
+    fun update(id: String, input: String) {
+        todoManager.update(id, input)
     }
 
     fun toggleCheckTodo(todo: Todo) {
         todoManager.toggleCheck(todo.todoId)
+    }
+
+    fun hideKeyboard(view: View) {
+        Util.hideKeyboard(context, view)
     }
 }

@@ -4,8 +4,7 @@ import android.os.Build
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
@@ -44,25 +43,36 @@ class TodoAdapter(
             todoActions: TodoActions
         ) {
             binding.textTodo.text = item.text
+            Timber.i(item.text)
             binding.editTextTodo.setText(item.text)
+
+            binding.editTextTodo.visibility = GONE
+            binding.textTodo.visibility = VISIBLE
 
             binding.deleteButton.setOnClickListener {
                 todoActions.deleteTodo(item)
             }
 
-            binding.textTodo.setOnClickListener {
+            binding.textTodoWrapper.setOnClickListener {
+
                 binding.editTextTodo.visibility = VISIBLE
+                binding.textTodo.visibility = GONE
                 todoActions.getFocus(item)
             }
 
             binding.editTextTodo.setOnKeyListener { _: View, keyCode: Int, event: KeyEvent ->
                 val input = binding.editTextTodo.text.toString()
+                Timber.i(input)
                 if (Util.isEnterPressedDown(keyCode, event)) {
                     todoActions.update(item.todoId, input)
+                    Timber.i("Pressed enter: $input")
                     todoActions.insert()
                     todoActions.setFocus(item.createdAt)
                     binding.textTodo.text = input
                     binding.editTextTodo.clearFocus()
+                    binding.editTextTodo.visibility = GONE
+                    binding.textTodo.visibility = VISIBLE
+                    todoActions.hideKeyboard(binding.textTodoWrapper)
                     return@setOnKeyListener true
                 }
                 return@setOnKeyListener false

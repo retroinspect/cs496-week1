@@ -135,7 +135,7 @@ class NoteRealmManager(val realm: Realm) {
 }
 
 
-class TodoRealmManager(val realm: Realm, noteId: String) {
+class TodoRealmManager(val realm: Realm, val noteId: String) {
 
     val curNote: Note? = realm.where<Note>().equalTo("id", noteId).findFirst()
 
@@ -144,18 +144,19 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
     /// clear todo list
     fun clear() {
         realm.beginTransaction()
-        curNote?.todos?.clear()
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
+        curNote.todos.clear()
         val data = realm.createObject<Todo>(getPrimaryKey())
-        curNote?.todos?.add(data)
+        curNote.todos.add(data)
         realm.commitTransaction()
     }
 
     /// insert an empty todo
-    fun insert(): Todo? {
-        if (curNote == null) {
-            Timber.i("Invalid noteId")
-            return null
-        }
+    fun insert(): Todo {
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
 
         Timber.i("add a todo")
         realm.beginTransaction()
@@ -166,29 +167,27 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
     }
 
     fun get(todoId: String): Todo? {
-        if (curNote != null) {
-            return curNote.todos.find { it.todoId == todoId }
-        }
-        return null
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
+        return curNote.todos.find { it.todoId == todoId }
     }
 
-    fun getAllTodos(): RealmList<Todo>? {
-        if (curNote != null) {
-            return curNote.todos
-        }
+    fun getAllTodos(): RealmList<Todo> {
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
 
-        return null
+        return curNote.todos
     }
 
-    fun getFocusedTodo(createdAt: Date = Date(Long.MIN_VALUE)): Todo? {
-        if (curNote == null) {
-            curNoteIsNull()
-            return null
-        }
+    fun getFocusedTodo(createdAt: Date = Date(Long.MIN_VALUE)): Todo {
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
         realm.beginTransaction()
         var focusedTodo = curNote.todos.find { it.createdAt > createdAt }
         if (focusedTodo == null) {
-            focusedTodo = realm.createObject<Todo>(getPrimaryKey())
+            focusedTodo = realm.createObject(getPrimaryKey())
             curNote.todos.add(focusedTodo)
         }
         realm.commitTransaction()
@@ -196,25 +195,27 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
     }
 
     fun update(todoId: String, text: String) {
-        if (curNote == null) {
-            curNoteIsNull()
-            return
-        }
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
         realm.beginTransaction()
         val selectedTodo = curNote.todos.find { it.todoId == todoId }
-        if (selectedTodo != null) {
-            selectedTodo.text = text
-        }
+            ?: throw Exception("No corresponding todo of id $todoId")
+        Timber.i("should update todo id: $todoId to input $text")
+        selectedTodo.text = text
         realm.commitTransaction()
     }
 
     fun getTitle(): String? {
-        if (curNote == null) return null
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
         return curNote.title
     }
 
     fun updateTitle(input: String) {
-        if (curNote == null) return
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
         realm.beginTransaction()
         curNote.title = input
         realm.commitTransaction()
@@ -223,10 +224,9 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun delete(todoId: String) {
-        if (curNote == null) {
-            curNoteIsNull()
-            return
-        }
+        if (curNote == null)
+            throw Exception("No corresponding note of id $noteId")
+
         realm.beginTransaction()
         curNote.todos.removeIf { it.todoId == todoId }
         if (curNote.todos.isEmpty()) {
@@ -238,12 +238,8 @@ class TodoRealmManager(val realm: Realm, noteId: String) {
 
     fun toggleCheck(todoId: String) {
         realm.beginTransaction()
-        val todoToUpdate = get(todoId)
-        if (todoToUpdate != null) {
-            todoToUpdate.isCompleted = !todoToUpdate.isCompleted
-        }
+        val todoToUpdate = get(todoId) ?: throw Exception("No corresponding todo of id $todoId")
+        todoToUpdate.isCompleted = !todoToUpdate.isCompleted
         realm.commitTransaction()
     }
-
-    private fun curNoteIsNull() = Timber.i("curNote is null: This should not happen")
 }

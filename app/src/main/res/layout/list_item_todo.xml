@@ -22,8 +22,10 @@
             tools:checked="true" />
 
         <LinearLayout
-            android:layout_width="264dp"
+            android:id="@+id/text_todo_wrapper"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/purple_200"
             android:orientation="horizontal">
 
             <TextView
@@ -31,13 +33,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
-                android:visibility="gone"
                 tools:text="text" />
 
             <EditText
                 android:id="@+id/edit_text_todo"
-                android:layout_width="wrap_content"
-                android:minWidth="64dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
