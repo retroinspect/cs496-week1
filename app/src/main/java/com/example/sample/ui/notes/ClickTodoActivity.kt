@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
@@ -38,6 +39,7 @@ class ClickTodoActivity : AppCompatActivity() {
     lateinit var todoList: RecyclerView
     lateinit var titleTodo: TextView
     lateinit var editTitleTodo: EditText
+    private lateinit var viewModel: TodoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,14 +54,16 @@ class ClickTodoActivity : AppCompatActivity() {
         if (todoId != null) {
             todoManager = TodoRealmManager(realm, todoId)
 //            setView()
-            todoActions = TodoActions(baseContext, todoManager)
-
+            val viewModelFactory = TodoViewModelFactory(todoManager, application)
+            viewModel = ViewModelProvider(
+                this, viewModelFactory
+            ).get(TodoViewModel::class.java)
+            todoActions = TodoActions(baseContext, todoManager, viewModel)
 
             clearTodoAll.setOnClickListener {
                 todoActions.clearAll()
                 Timber.i("Clear button clicked")
             }
-
 
             val todos = todoActions.getAllTodos()
 
@@ -70,7 +74,6 @@ class ClickTodoActivity : AppCompatActivity() {
             todoList.adapter = adapter
             val layoutManager = LinearLayoutManager(baseContext)
             todoList.layoutManager = layoutManager
-
 
             titleTodo.setOnClickListener {
                 Timber.i("titleTodo click listener")
@@ -178,7 +181,8 @@ class ClickTodoActivity : AppCompatActivity() {
 
 class TodoActions(
     val context: Context?,
-    private val todoManager: TodoRealmManager
+    private val todoManager: TodoRealmManager,
+    val viewModel: TodoViewModel
 ) {
     fun getTitle(): String? = todoManager.getTitle()
     var focusedTodo: Todo? = null
@@ -194,24 +198,20 @@ class TodoActions(
     fun deleteTodo(todo: Todo) = todoManager.delete(todo.todoId)
 
     fun setFocusToNextTodo(todo: Todo) {
-        focusedTodo = todoManager.getFocusedTodo(todo.createdAt)
+        viewModel.setFocusToNextTodo(todo.createdAt)
     }
 
     fun hasFocus(todo: Todo): Boolean {
-        return (todo.todoId == focusedTodo?.todoId)
+        return viewModel.hasFocus(todo)
     }
 
     fun setFocusToCurrentTodo(todo: Todo, view: View? = null) {
-        focusedView?.clearFocus()
-        focusedTodo = todo
-        focusedView = view
+        viewModel.setFocusToCurrentTodo(todo)
     }
-
-
 
     fun clearAll() {
         todoManager.clear()
-        focusedTodo = null
+        viewModel.clearFocus()
     }
 
     fun insert() {

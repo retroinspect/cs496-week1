@@ -3,13 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="clickListener"
+            type="com.example.sample.ui.todo.TodoListener" />
+
+        <variable
+            name="todo"
+            type="com.example.sample.database.Todo" />
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
-        >
+        android:orientation="horizontal">
 
         <CheckBox
             android:id="@+id/checkbox_todo"
@@ -22,10 +31,8 @@
             tools:checked="true" />
 
         <LinearLayout
-            android:id="@+id/text_todo_wrapper"
-            android:layout_width="match_parent"
+            android:layout_width="264dp"
             android:layout_height="wrap_content"
-            android:background="@color/purple_200"
             android:orientation="horizontal">
 
             <TextView
@@ -33,6 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
+                android:visibility="gone"
                 tools:text="text" />
 
             <EditText
@@ -43,7 +51,6 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:focusableInTouchMode="true"
                 android:autofillHints=""
                 android:background="@android:color/transparent"
                 android:gravity="start"
@@ -56,14 +63,16 @@
 
         <ImageButton
             android:id="@+id/delete_button"
-            android:visibility="invisible"
             android:layout_width="@dimen/medium_size"
             android:layout_height="@dimen/medium_size"
             android:background="@android:color/transparent"
             android:contentDescription="@string/delete_button_desc"
             android:gravity="center"
-            app:src="@drawable/ic_baseline_close_24"
-            tools:srcCompat="@drawable/ic_baseline_close_24" />
+            android:onClick="@{() -> clickListener.onClick(todo)}"
+            android:tint="@color/design_default_color_primary"
+            android:visibility="invisible"
+            app:srcCompat="@android:drawable/ic_delete"
+            tools:srcCompat="@android:drawable/ic_delete" />
     </LinearLayout>
 
 </layout>
