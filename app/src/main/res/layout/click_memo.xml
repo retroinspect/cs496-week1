@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_gravity="start|top"
-    android:padding="@dimen/small_padding"
-    android:layout_marginTop="60dp">
+    android:layout_margin="60dp">
 
     <EditText
-        android:inputType="text"
         android:id="@+id/edit_memo_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints="@string/memo_autoFillHints"
-        android:hint="@string/memo_autoFillHints"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:hint="Title"/>
 
     <EditText
         android:id="@+id/edit_memo_contents"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/memo_desc_height"
-        android:inputType="textMultiLine"
-        android:layout_gravity="start"
-        android:autofillHints="@string/empty_hint"
-        android:hint="@string/memo_desc_hint"/>
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:hint="Contents"/>
 
     <Button
         android:id="@+id/edit_memo_save"
         android:layout_width="150dp"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_gravity="center"
-        android:text="@string/memo_save_button_text"/>
+        android:backgroundTint="@color/first_tap_color"
+        android:text="save"/>
 
 </LinearLayout>

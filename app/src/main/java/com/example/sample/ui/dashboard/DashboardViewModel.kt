@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import kotlin.collections.ArrayList
+import kotlin.time.measureTimedValue
 
 class DashboardViewModel(
     application: Application
@@ -28,13 +29,8 @@ class DashboardViewModel(
         val sortOrder = null
 
         val imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val cursorOrNull = context.contentResolver?.query(
-            imageUri,
-            projection,
-            selection,
-            selectionArgs,
-            sortOrder
-        )
+
+        val cursorOrNull = context.contentResolver?.query(imageUri, projection, selection, selectionArgs, sortOrder)
         if (cursorOrNull != null) {
             val cursor = cursorOrNull
             val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE)
@@ -46,7 +42,6 @@ class DashboardViewModel(
                 val contentUri: Uri =
                     ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                 val imageModel = ImageModel(contentUri, title)
-                Log.i("refresh", title)
                 images.add(imageModel)
             }
             cursor.close()

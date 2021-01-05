@@ -22,6 +22,7 @@
         android:layout_width="112dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
+        android:backgroundTint="@color/first_tap_color"
         android:text="저장" />
 
 </LinearLayout>

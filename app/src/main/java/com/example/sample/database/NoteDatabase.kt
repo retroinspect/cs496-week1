@@ -18,12 +18,12 @@ open class Note : RealmObject() {
     var title: String = ""
     var isTodo = false
     var createdAt: Date = Date()
-    var memo: Memo? = null
+    var memo: Memo? = Memo()
     var todos: RealmList<Todo> = RealmList()
 }
 
-open class Memo : RealmObject() {
-    var desc: String = ""
+open class Memo(desc: String = "") : RealmObject() {
+    var desc: String = desc
     var imgUri: String? = null
 }
 
@@ -114,7 +114,6 @@ class NoteRealmManager(val realm: Realm) {
     fun update(oldNote: Note, newNote: Note) {
         realm.beginTransaction()
         oldNote.title = newNote.title
-
         realm.commitTransaction()
     }
 
@@ -154,13 +153,15 @@ class TodoRealmManager(val realm: Realm, val noteId: String) {
     }
 
     /// insert an empty todo
-    fun insert(): Todo {
+    fun insert(input: String = "", isCompleted: Boolean = false): Todo {
         if (curNote == null)
             throw Exception("No corresponding note of id $noteId")
 
         Timber.i("add a todo")
         realm.beginTransaction()
         val data = realm.createObject<Todo>(getPrimaryKey())
+        data.text = input
+        data.isCompleted = isCompleted
         curNote.todos.add(data)
         realm.commitTransaction()
         return data

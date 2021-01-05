@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="main_color">#F9F8F5</color>
+    <color name="first_tap_color">#E8C2C1</color>
+    <color name="second_tap_color">#93888C</color>
+    <color name="third_tap_color">#333439</color>
+    <color name="memo_color1">#ECDFCC</color>
+    <color name="memo_color2">#CEC2B2</color>
+    <color name="memo_color3">#AC9875</color>
+    <color name="memo_color4">#796D61</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="light_grey">#bbb</color>
+    <color name="default_icon_color">#90908E</color>
+    <color name="selected_color">#403835</color>
+    <color name="no_color">#00000000</color>
+    <color name="fab_color">#93888C</color>
+    <color name="text_color">#403835</color>
 </resources>

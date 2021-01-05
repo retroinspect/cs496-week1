@@ -63,7 +63,7 @@
                 android:layout_width="@dimen/medium_size"
                 android:layout_height="@dimen/medium_size"
                 android:layout_marginTop="4dp"
-                android:background="@android:color/transparent"
+                android:background="@color/second_tap_color"
                 android:contentDescription="@string/clear_button"
                 android:src="@android:drawable/ic_menu_delete" />
         </LinearLayout>

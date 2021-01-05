@@ -34,7 +34,8 @@
         android:id="@+id/create_phone_submit"
         android:layout_width="112dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/third_tap_color"
+        android:backgroundTint="@color/first_tap_color"
         android:text="@string/save" />
 
 </LinearLayout>

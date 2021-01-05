@@ -3,67 +3,85 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
-        android:padding="@dimen/medium_size">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/note_title"
-            android:textSize="@dimen/note_title_font" />
-
+        android:background="@color/main_color">
 
         <LinearLayout
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/create_note_button"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="@string/create_note_button_text"
-                android:textColor="@color/purple_700"
-                tools:text="@string/create_note_button_text" />
-
-            <Button
-                android:id="@+id/create_todo_list_button"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="@string/create_todo_list_button_text"
-                android:textColor="@color/purple_700"
-                tools:text="@string/create_todo_list_button_text" />
-
-            <Button
-                android:id="@+id/clear_note_button"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/clear_notes_button_text"
-                android:textColor="@color/purple_700"
-                tools:text="@string/clear_notes_button_text" />
-
+                android:text="Notes"
+                android:textSize="@dimen/note_title_font" />
 
         </LinearLayout>
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/note_list"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:layout_marginTop="8dp" />
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="50dp" />
 
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="70dp"
+            app:layout_anchor="@id/note_list"
+            app:layout_anchorGravity="bottom|right|end">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/create_todo_list_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/create_memo_button"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="#ffffff"
+                android:src="@drawable/ic_baseline_fact_check_24"
+                android:visibility="invisible"
+                app:borderWidth="0dp"
+                app:fabSize="normal" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/create_memo_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/note_add_button"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="#ffffff"
+                android:src="@drawable/ic_baseline_post_add_24"
+                android:visibility="invisible"
+                app:borderWidth="0dp"
+                app:fabSize="normal" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/note_add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/fab_color"
+                app:borderWidth="0dp"
+                android:src="@drawable/ic_baseline_add_24"
+                app:fabSize="normal"  />
+
+        </RelativeLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

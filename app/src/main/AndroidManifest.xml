@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Sample">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -22,10 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.home.CreateActivity"/>
-        <activity android:name=".ui.dashboard.ClickImageActivity"/>
-        <activity android:name=".ui.notes.ClickMemoActivity"/>
-        <activity android:name=".ui.notes.ClickTodoActivity"/>
+        <activity android:name=".ui.home.CreateActivity" />
+        <activity android:name=".ui.dashboard.ClickImageActivity"
+            android:theme="@style/AppTheme.SubActivity"/>
+        <activity android:name=".ui.notes.ClickTodoActivity"
+            android:theme="@style/AppTheme.SubActivity"/>
+        <activity android:name=".ui.notes.ClickMemoActivity"
+            android:theme="@style/AppTheme.SubActivity"/>
+        <activity android:name=".ui.notes.LongClickPopupActivity"/>
     </application>
 
 </manifest>
