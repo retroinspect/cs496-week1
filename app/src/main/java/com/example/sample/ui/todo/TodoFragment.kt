@@ -106,6 +106,10 @@ class TodoFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.todoList.layoutManager = layoutManager
 
+        binding.clearTodoAll.setOnClickListener {
+            todoManager.clear()
+        }
+
         return binding.root
     }
 
