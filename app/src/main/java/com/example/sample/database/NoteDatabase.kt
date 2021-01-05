@@ -1,6 +1,5 @@
 package com.example.sample.database
 
-import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import io.realm.Realm
@@ -78,7 +77,7 @@ class MemoRealmManager(val realm: Realm, val noteId: String) {
             curNote.memo!!.desc = input
         } else
             memo.desc = input
-        
+
         realm.commitTransaction()
     }
 }
@@ -94,6 +93,7 @@ class NoteRealmManager(val realm: Realm) {
         if (isTodo) {
             val data = realm.createObject<Todo>(getPrimaryKey())
             note.todos.add(data)
+            Timber.i("Add todo")
         }
         realm.commitTransaction()
         return primaryKey

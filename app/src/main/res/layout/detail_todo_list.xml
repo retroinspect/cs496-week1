@@ -2,14 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="todoViewModel"
-            type="com.example.sample.ui.todo.TodoViewModel" />
-    </data>
-
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="start|top"
@@ -51,7 +44,7 @@
                 android:gravity="start"
                 android:hint="@string/todo_title_hint"
                 android:textColor="@color/white"
-                android:inputType="textMultiLine"
+                android:inputType="text"
                 android:textSize="@dimen/todo_title"
                 tools:text="@string/title_todo" />
 
@@ -60,10 +53,10 @@
                 android:layout_width="@dimen/medium_size"
                 android:layout_height="@dimen/medium_size"
                 android:layout_marginTop="4dp"
-                android:layout_marginLeft="270dp"
+                android:layout_marginLeft="@dimen/clear_button_margin"
+                android:layout_marginStart="@dimen/clear_button_margin"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/clear_button"
-                android:onClick="@{() -> todoViewModel.onClear()}"
                 android:src="@android:drawable/ic_menu_delete" />
         </androidx.cardview.widget.CardView>
 

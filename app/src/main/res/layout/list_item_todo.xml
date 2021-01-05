@@ -3,16 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="clickListener"
-            type="com.example.sample.ui.todo.TodoListener" />
-
-        <variable
-            name="todo"
-            type="com.example.sample.database.Todo" />
-    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,8 +61,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/delete_button_desc"
             android:gravity="center"
-            android:onClick="@{() -> clickListener.onClick(todo)}"
-            app:srcCompat="@drawable/ic_baseline_close_24"
+            app:src="@drawable/ic_baseline_close_24"
             tools:srcCompat="@drawable/ic_baseline_close_24" />
     </LinearLayout>
 
