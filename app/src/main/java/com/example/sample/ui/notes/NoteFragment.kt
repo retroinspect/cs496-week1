@@ -76,9 +76,6 @@ class NoteFragment : Fragment() {
             oneMemoIntent.putExtra("memo_id", newTodoId)
             context?.startActivity(oneMemoIntent)
         }
-        binding.clearTodoAll.setOnClickListener {
-            noteManager.clear()
-        }
         return binding.root
     }
 

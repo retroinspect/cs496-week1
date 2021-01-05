@@ -1,6 +1,7 @@
 package com.example.sample.ui.notes
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
 import com.example.sample.database.Note
+import com.example.sample.database.NoteRealmManager
 import com.example.sample.database.Todo
+import com.example.sample.database.TodoRealmManager
 import io.realm.OrderedRealmCollection
+import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
 import kotlinx.android.synthetic.main.preview_todo_item.view.*
 import timber.log.Timber
@@ -46,11 +50,13 @@ class NoteAdapter(
                 // TODO 노트 종류에 따라 적절한 Activity로 이동하도록 하기
             }
 
-            // TODO noteActions 에 delete 등을 추가해서 longClickListener 로 삭제/공유하도록 하기
-//            itemView.setOnLongClickListener {
-//                Timber.i("LongClick: ${item.id}")
-//                return@setOnLongClickListener true
-//            }
+            itemView.setOnLongClickListener {
+                val longClickIntent = Intent(context, LongClickPopupActivity::class.java)
+                longClickIntent.putExtra("note_id", item.id)
+                context?.startActivity(longClickIntent)
+                //deleteItem(item.id)
+                return@setOnLongClickListener true
+            }
 
             if (item.isTodo)
                 setTodoPreview(itemView, item, context)

@@ -26,6 +26,7 @@
         <activity android:name=".ui.dashboard.ClickImageActivity"/>
         <activity android:name=".ui.notes.ClickTodoActivity"/>
         <activity android:name=".ui.notes.ClickMemoActivity"/>
+        <activity android:name=".ui.notes.LongClickPopupActivity"/>
     </application>
 
 </manifest>
