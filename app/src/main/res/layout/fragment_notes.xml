@@ -32,7 +32,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:text="@string/create_note_button_text"
+                android:textColor="@color/purple_700"
                 tools:text="@string/create_note_button_text" />
+
+            <Button
+                android:id="@+id/create_todo_list_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="@string/create_todo_list_button_text"
+                android:textColor="@color/purple_700"
+                tools:text="@string/create_todo_list_button_text" />
 
             <Button
                 android:id="@+id/clear_note_button"
@@ -40,6 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/clear_notes_button_text"
+                android:textColor="@color/purple_700"
                 tools:text="@string/clear_notes_button_text" />
 
 

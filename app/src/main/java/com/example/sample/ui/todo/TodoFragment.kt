@@ -29,7 +29,6 @@ class TodoFragment : Fragment() {
     val realm: Realm = Realm.getDefaultInstance()
 
     val noteManager = NoteRealmManager(realm)
-//    val noteId : String = noteManager.insert(false)
 
     val noteId = "50b02432-89fd-4ea9-a90c-c98fb7f18120"
     val dataSource = TodoRealmManager(realm, noteId)

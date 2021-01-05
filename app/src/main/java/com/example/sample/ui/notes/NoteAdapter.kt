@@ -53,7 +53,7 @@ class NoteAdapter(
             }
 
             val title: TextView = itemView.findViewById(R.id.title_preview_memo)
-            val desc: TextView = itemView.findViewById(R.id.desc_preview_memo)
+            val desc: TextView = itemView.findViewById(R.id.desc_preview_note)
             title.text = "노트"
             if (item.isTodo) desc.text = "투두투두"
             else desc.text = "메모메모"

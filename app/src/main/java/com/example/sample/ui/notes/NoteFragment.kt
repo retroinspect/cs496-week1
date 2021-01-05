@@ -42,6 +42,9 @@ class NoteFragment : Fragment() {
         binding.createNoteButton.setOnClickListener {
             noteManager.insert(false)
         }
+        binding.createTodoListButton.setOnClickListener {
+            noteManager.insert(true)
+        }
         binding.clearNoteButton.setOnClickListener {
             noteManager.clear()
         }
