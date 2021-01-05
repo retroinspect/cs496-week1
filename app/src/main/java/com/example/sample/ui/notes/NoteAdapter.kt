@@ -1,5 +1,6 @@
 package com.example.sample.ui.notes
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,6 @@ import com.example.sample.R
 import com.example.sample.database.Note
 import io.realm.OrderedRealmCollection
 import io.realm.RealmRecyclerViewAdapter
-import kotlinx.android.synthetic.main.preview_memo.view.*
-import timber.log.Timber
 
 
 class NoteAdapter(
@@ -37,7 +36,20 @@ class NoteAdapter(
             noteActions: NoteActions
         ) {
             itemView.setOnClickListener {
-                Timber.i(item.id)
+                val note = noteActions.get(item.id)
+                val context = noteActions.getContext()
+                if (note?.isTodo == true) {
+                    //TodoActivity
+                    val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
+                    oneTodoIntent.putExtra("todo_id", item.id)
+                    context?.startActivity(oneTodoIntent)
+                }
+                else if (note?.isTodo == false) {
+                    //MemoActivity
+                    val oneMemoIntent = Intent(context, ClickMemoActivity::class.java)
+                    oneMemoIntent.putExtra("memo_id", item.id)
+                    context?.startActivity(oneMemoIntent)
+                }
             }
 
             val title: TextView = itemView.findViewById(R.id.title_preview_memo)

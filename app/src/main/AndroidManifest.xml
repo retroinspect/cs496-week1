@@ -24,7 +24,7 @@
         </activity>
         <activity android:name=".ui.home.CreateActivity"/>
         <activity android:name=".ui.dashboard.ClickImageActivity"/>
-        <activity android:name=".ui.todo.ClickMemoActivity"/>
+        <activity android:name=".ui.notes.ClickMemoActivity"/>
     </application>
 
 </manifest>

@@ -1,22 +1,21 @@
 package com.example.sample.ui.notes
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore.Video
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.sample.R
 import com.example.sample.database.Note
 import com.example.sample.database.NoteRealmManager
 import com.example.sample.databinding.FragmentNotesBinding
-import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmResults
-import java.util.*
 
 
 class NoteFragment : Fragment() {
@@ -34,7 +33,7 @@ class NoteFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_notes, container, false)
 
         val model: RealmResults<Note> = noteManager.getAllNotes()
-        val adapter = NoteAdapter(NoteActions(), model)
+        val adapter = NoteAdapter(NoteActions(noteManager, context), model)
 
         binding.noteList.adapter = adapter
 
@@ -56,6 +55,14 @@ class NoteFragment : Fragment() {
     }
 }
 
-class NoteActions() {
+class NoteActions(val noteRealmManager: NoteRealmManager, context : Context?) {
+    val sendContext : Context? = context
 
+    fun get(id: String): Note? {
+        return noteRealmManager.get(id)
+    }
+
+    fun getContext() : Context? {
+        return sendContext
+    }
 }

@@ -2,12 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="noteViewModel"
-            type="com.example.sample.ui.notes.NoteViewModel" />
-    </data>
 
     <LinearLayout
         android:layout_width="match_parent"

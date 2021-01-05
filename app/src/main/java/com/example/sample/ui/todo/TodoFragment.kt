@@ -1,7 +1,6 @@
 package com.example.sample.ui.todo
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -16,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sample.R
 import com.example.sample.Util
-import com.example.sample.database.Note
 import com.example.sample.database.NoteRealmManager
 import com.example.sample.database.Todo
 import com.example.sample.database.TodoRealmManager
@@ -71,25 +69,6 @@ class TodoFragment : Fragment() {
         binding.titleTodo.setOnClickListener {
             binding.editTitleTodo.visibility = VISIBLE
             binding.titleTodo.visibility = GONE
-        }
-
-        //임시 세부화면 버튼
-        binding.subWindow.setOnClickListener {
-            val note = noteManager.get(id) //id : setItemListener에서 가져와야 함!
-            if (note?.isTodo == true) {
-                //TodoActivity
-                val oneTodoIntent = Intent(context, ClickTodoActivity::class.java)
-                oneTodoIntent.putExtra("before_edit_title", note.title)
-                oneTodoIntent.putExtra("before_edit_contexts", note.todos) //to-do type 전달 가능하도록 수정해야 함
-                startActivityForResult(oneTodoIntent, 10001)
-            }
-            else if (note?.isTodo == false) {
-                //MemoActivity
-                val oneMemoIntent = Intent(context, ClickMemoActivity::class.java)
-                oneMemoIntent.putExtra("before_edit_title", note.title)
-                oneMemoIntent.putExtra("before_edit_contexts", note.memo?.desc)
-                startActivityForResult(oneMemoIntent, 10002)
-            }
         }
 
         val title = dataSource.getTitle()
@@ -150,7 +129,4 @@ class TodoActions(
     val setFocus = { createdAt: Date ->
         viewModel.setFocus(createdAt)
     }
-
-//    val updateTitle = { input: String -> viewModel.updateTitle(input) }
-
 }

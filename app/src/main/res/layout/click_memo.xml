@@ -8,15 +8,22 @@
     android:layout_margin="60dp">
 
     <EditText
-        android:id="@+id/edit_note_title"
+        android:id="@+id/edit_memo_title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Title"/>
 
     <EditText
-        android:id="@+id/edit_note_contents"
+        android:id="@+id/edit_memo_contents"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="470dp"
         android:hint="Contents"/>
+
+    <Button
+        android:id="@+id/edit_memo_save"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:text="save"/>
 
 </LinearLayout>

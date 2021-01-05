@@ -1,4 +1,4 @@
-package com.example.sample.ui.todo
+package com.example.sample.ui.notes
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -6,29 +6,45 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
+import com.example.sample.database.Note
+import com.example.sample.database.NoteRealmManager
+import io.realm.Realm
 import timber.log.Timber
 
-class ClickTodoActivity : AppCompatActivity() {
+class ClickMemoActivity : AppCompatActivity() {
     lateinit var mainIntent : Intent
-    lateinit var titleView : TextView
-    lateinit var contentsView : RecyclerView
+    lateinit var titleView : EditText
+    lateinit var contentsView : EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_todos)
+        setContentView(R.layout.click_memo)
         mainIntent = getIntent()
+        titleView = findViewById(R.id.edit_memo_title) as EditText
+        contentsView = findViewById(R.id.edit_memo_contents) as EditText
+        val memoId : String? = mainIntent.getStringExtra("memo_id")
 
-        titleView = findViewById(R.id.title_todo) as TextView
-        contentsView = findViewById(R.id.todo_list) as RecyclerView
-        titleView.setText(mainIntent.getStringExtra("before_edit_title"))
-        //recyclerView를 기존 data로 업데이트해두기
+        val realm: Realm = Realm.getDefaultInstance()
+        val noteManager = NoteRealmManager(realm)
+        if (memoId != null) {
+            val note : Note? = noteManager.get(memoId)
+            val title = note?.title
+            val contents = note?.memo?.desc
+            titleView.setText(title)
+            contentsView.setText(contents)
+        }
+
+        //save 되는지 확인하기
+        val memoSaveButton : Button = findViewById(R.id.edit_memo_save)
+        memoSaveButton.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu : Menu) : Boolean {
@@ -83,7 +99,7 @@ class ClickTodoActivity : AppCompatActivity() {
 
     fun getMessage() : String {
         var resultMessage = "["+titleView.text+"]\n"
-        //contentsView의 todos를 string으로 변환
+        resultMessage += contentsView.text
         Timber.i("getMessage ${resultMessage}")
         return resultMessage
     }

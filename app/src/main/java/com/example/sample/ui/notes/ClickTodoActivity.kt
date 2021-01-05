@@ -1,31 +1,44 @@
-package com.example.sample.ui.todo
+package com.example.sample.ui.notes
 
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.EditText
+import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.sample.R
+import com.example.sample.Util
+import com.example.sample.database.Note
+import com.example.sample.database.NoteRealmManager
+import com.example.sample.database.TodoRealmManager
+import com.example.sample.databinding.FragmentTodosBinding
+import com.example.sample.ui.todo.TodoActions
+import com.example.sample.ui.todo.TodoAdapter
+import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 
-class ClickMemoActivity : AppCompatActivity() {
+class ClickTodoActivity : AppCompatActivity() {
     lateinit var mainIntent : Intent
-    lateinit var titleView : EditText
-    lateinit var contentsView : EditText
+    lateinit var titleView : TextView
+    lateinit var contentsView : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.click_memo)
+        setContentView(R.layout.fragment_todos)
         mainIntent = getIntent()
-        titleView = findViewById(R.id.edit_note_title) as EditText
-        contentsView = findViewById(R.id.edit_note_contents) as EditText
-        titleView.setText(mainIntent.getStringExtra("before_edit_title"))
-        contentsView.setText(mainIntent.getStringExtra("before_edit_contents"))
+
+        titleView = findViewById(R.id.title_todo) as TextView
+        contentsView = findViewById(R.id.todo_list) as RecyclerView
+        val todoId : String? = mainIntent.getStringExtra("todo_id")
+        //recyclerView를 기존 data로 업데이트해두기
+        updateRecyclerView(todoId)
     }
 
     override fun onCreateOptionsMenu(menu : Menu) : Boolean {
@@ -80,8 +93,24 @@ class ClickMemoActivity : AppCompatActivity() {
 
     fun getMessage() : String {
         var resultMessage = "["+titleView.text+"]\n"
-        resultMessage += contentsView.text
+        //contentsView의 todos를 string으로 변환
         Timber.i("getMessage ${resultMessage}")
         return resultMessage
+    }
+
+    fun updateRecyclerView(id : String?) {
+        val realm: Realm = Realm.getDefaultInstance()
+        val noteManager = NoteRealmManager(realm)
+        if (id != null) {
+            val note : Note? = noteManager.get(id)
+
+            //title update
+            val todoTitle = note?.title
+            titleView.setText(todoTitle)
+
+            //contents update
+            val contents = note?.todos
+            val dataSource = TodoRealmManager(realm, id)
+        }
     }
 }
