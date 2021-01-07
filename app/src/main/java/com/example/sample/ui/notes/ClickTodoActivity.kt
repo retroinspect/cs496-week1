@@ -22,9 +22,13 @@ class ClickTodoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.notes_item_menu, menu)
         mainIntent = intent
         setContentView(R.layout.detail_todo_list)
-
         val todoListId: String? = mainIntent.getStringExtra("todo_id")
         if (todoListId == null) {
             Timber.i("TodoList id is null")
@@ -33,19 +37,25 @@ class ClickTodoActivity : AppCompatActivity() {
             val todoFragment = TodoFragment()
             supportFragmentManager.beginTransaction().replace(R.id.detail_todo_list, todoFragment)
                 .commit()
-
+            todoManager = TodoRealmManager(realm, todoListId)
             val bundle = Bundle()
             bundle.putString("noteId", todoListId)
             todoFragment.arguments = bundle
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.notes_item_menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        mainIntent = intent
+//
+//        val todoListId: String? = mainIntent.getStringExtra("todo_id")
+//        if (todoListId == null) {
+//            Timber.i("TodoList id is null")
+//            finish()
+//        }
+//        else todoManager = TodoRealmManager(realm, todoListId)
+
         val selected = item.itemId
         if (selected == R.id.share_kakaotalk) {
             try {
@@ -93,9 +103,18 @@ class ClickTodoActivity : AppCompatActivity() {
 
     private fun getMessage(): String {
         val resultMessage = "[" + todoManager.getTitle() + "]\n"
-        // TODO todoList 의 todos 를 string 으로 변환
-        Timber.i("getMessage ${resultMessage}")
-        return resultMessage
+        val contentsMsg = getContents()
+        Timber.i("getMessage ${resultMessage}  $contentsMsg")
+        return (resultMessage + contentsMsg)
+    }
+
+    private fun getContents(): String {
+        var contentsMsg = ""
+        val todos = todoManager.getAllTodos()
+        for (todo in todos) {
+            contentsMsg = contentsMsg + "- " + todo.text + "\n"
+        }
+        return contentsMsg
     }
 
     override fun onDestroy() {
